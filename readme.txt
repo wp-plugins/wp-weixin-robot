@@ -18,7 +18,7 @@ May use the advanced interface (https://api.weixin.qq.com/).
 
 == Installation ==
 
-1. 上传 `weixin-robot.php` 到 `/wp-content/plugins/` 目录
+1. 上传到 `/wp-content/plugins/` 目录
 1. 在后台插件菜单激活该插件
 1. 在微信后台，将接口配置信息中的 URL 设置为：http://你博客地址/?midoks Token 设置为:midoks
 
@@ -52,7 +52,22 @@ An answer to that question.
 11.增加了一个简单图形统计功能
 12.添加了回复数字'0',返回分类信息
 
+有一部分的人,使用我写的插件。我感到非常的高兴。所以我把插件在WordPress官方网站上。再过一段时间，我将正式开发5.0版本。敬请大家关注。如果有什么问题，请通过邮件回复我。
+
 
 == Upgrade notice ==
 
-1.init
+= now =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv4-1.html
+
+= 4.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv4.html
+
+= 3.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv3.html
+
+= 2.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv2.html
+
+= 1.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
