@@ -1,4 +1,4 @@
-=== wp-weixin-robot ===
+=== WP微信机器人 ===
 Contributors: midoks@163.com
 Donate link: https://me.alipay.com/midoks
 Tags: weixin robot
@@ -9,7 +9,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Weixin connected to the WordPress, use the information you faster
-
+(微信连接Wordpress,是你的传播的信息更快)
 == Description ==
 
 Weixin connected to the WordPress, use the information you faster
@@ -18,9 +18,9 @@ May use the advanced interface (https://api.weixin.qq.com/).
 
 == Installation ==
 
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+1. 上传 `weixin-robot.php` 到 `/wp-content/plugins/` 目录
+1. 在后台插件菜单激活该插件
+1. 在微信后台，将接口配置信息中的 URL 设置为：http://你博客地址/?weixin Token 设置为:midoks
 
 == Frequently asked questions ==
 
@@ -55,7 +55,4 @@ An answer to that question.
 
 == Upgrade notice ==
 
-你要知道微信是什么东西!!!
-
-== Arbitrary section 1 ==
-
+1.init
