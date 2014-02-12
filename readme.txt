@@ -20,7 +20,7 @@ May use the advanced interface (https://api.weixin.qq.com/).
 
 1. 上传 `weixin-robot.php` 到 `/wp-content/plugins/` 目录
 1. 在后台插件菜单激活该插件
-1. 在微信后台，将接口配置信息中的 URL 设置为：http://你博客地址/?weixin Token 设置为:midoks
+1. 在微信后台，将接口配置信息中的 URL 设置为：http://你博客地址/?midoks Token 设置为:midoks
 
 == Frequently asked questions ==
 
