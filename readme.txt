@@ -19,8 +19,9 @@ May use the advanced interface (https://api.weixin.qq.com/).
 == Installation ==
 
 1. 上传到 `/wp-content/plugins/` 目录
-1. 在后台插件菜单激活该插件
-1. 在微信后台，将接口配置信息中的 URL 设置为：http://你博客地址/?midoks Token 设置为:midoks
+2. 在后台插件菜单激活该插件
+3. 在微信后台，将接口配置信息中的 URL 设置为：http://你博客地址/?midoks 
+4. Token 设置为:midoks
 
 == Frequently asked questions ==
 
