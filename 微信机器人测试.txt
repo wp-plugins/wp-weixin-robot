@@ -1,0 +1,1 @@
+/index.php?midoks&signature=12db30c88b933a71aa8f313f0c4df752948a4df1&echostr=5973827613480405785&timestamp=1391151897&nonce=1390890130
