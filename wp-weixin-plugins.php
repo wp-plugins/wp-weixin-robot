@@ -4,12 +4,18 @@
  */
 class wp_weixin_plugins{
 
-	private $obj = null;
+	public $obj = null;
+	public $db = null;
+	public $info = array();
+	public $option = array();
 
 	//构造函数
 	public function __construct($obj){
-		define('WEIXIN_PLUGINS', WEIXIN_ROOT.'plugins/');
+		define('WEIXIN_PLUGINS', WEIXIN_ROOT.'extends/');
 		$this->obj = $obj;
+		$this->info = $this->obj->info;
+		$this->option = $this->obj->options;
+		$this->db = $this->obj->db;
 	}
 
 	/**
@@ -123,107 +129,83 @@ class wp_weixin_plugins{
 	//插件启用
 	//返回数组
 	private function plugins_start($name, $args){
-		$flist = $this->get_all_plugins();
+		$db = $this->obj->db;
+		$flist = $db->select_extends_type($name);
+		if(!$flist) return false;
 		foreach($flist as $k=>$v){
-			$t = explode('_', $k);
-			//var_dump($k,$v, $t);
-			if($name== $t[1]){
-				include($v);
-				$tt = explode('.', $k);
-				$cn = $tt[0];
-				$obj = new $cn($this);
-				$data = $obj->start($args);
-				if($data){
-					return $data;
+			if($name == $v['ext_type']){
+				$abspath = WEIXIN_PLUGINS.$v['ext_name'];
+				if(!file_exists($abspath)){
+					$db->delete_extends_name($v['ext_name']);
+				}else{
+					include($abspath);
+					$tt = explode('.', $v['ext_name']);
+					$cn = $tt[0];
+					$obj = new $cn($this);
+					$data = $obj->start($args);
+					if( $data )	return $data;
 				}
+				
+				
 			}
 		}
 		return false;
 	}
 
-	private function get_all_plugins(){
+	public function get_all_plugins(){
 		$a = array();
 		if($h = opendir(WEIXIN_PLUGINS)){
 			while($f = readdir($h)){
 				if($f =='.' || $f=='..'){
 				}else if(is_file(WEIXIN_PLUGINS.$f)){
-					$a[$f] = WEIXIN_PLUGINS.$f;
+					if('php' == $this->get_file_suffix($f)){
+						$a['abspath'][] = WEIXIN_PLUGINS.$f;
+						$a['path'][] = $f;
+						$q = explode('_', $f);
+						$a['type'][] = $q[1];
+					}
 				}
 			}
 		}
 		return $a;
 	}
 
-/**********************************************************************
- 						@func 可以调用的接口
-***********************************************************************/
-
-
-
-	/**
-	 * @func 返回文本信信息
-	 * @param $Msg 信息
-	 * @ret string xml
-	 * exp:
-	 * echo $this->toMsgText($contentStr);//文本地址
-	 */
-	public function toMsgText($Msg){
-		return $this->obj->toMsgText($Msg);
+	public function get_file_suffix($file){
+		$l = explode('.', $file);
+		$c = count($l);
+		return $l[$c-1];
 	}
 
-	/**
-	 * @func 返回图片信息(测试未成功)
- 	 * @param $pic 图片信息
-	 * @ret string xml
-	 * exp:
-	 * echo $this->toMsgPic($pic);//图
-	 */
-	public function toMsgPic($Pic){
-  		return $this->obj->toMsgPic($Pic);
+
+	//插件安装
+	public function install($fn){
+		$abspath = WEIXIN_PLUGINS.$fn;
+		include($abspath);
+		$tt = explode('.', $fn);
+		$cn = $tt[0];
+		$obj = new $cn($this);
+		if(method_exists($obj, 'install')){
+			$obj->install();
+		}
 	}
 
-	/**
-	 * @func 返回voice xml
-	 * @param $title //标题
-	 * @param $desc //描述
-	 * @param $MusicUrl //地址
-	 * @param $HQMusicUrl //高清播放(会首先选择)
-	 * @ret string xml
-	 * exp:
-	 //echo $this->toMsgVoice('声音','当男人好难！', $MusicUrl, $MusicUrl);//voice
-	 */
-	public function toMsgVoice($title, $desc, $MusicUrl, $HQMusicUrl){
-		return $this->obj->toMsgVoice($title, $desc, $MusicUrl, $HQMusicUrl);
+	//插件卸载
+	public function uninstall($fn){
+		$abspath = WEIXIN_PLUGINS.$fn;
+		include($abspath);
+		$tt = explode('.', $fn);
+		$cn = $tt[0];
+		$obj = new $cn($this);
+		if(method_exists($obj, 'uninstall')){
+			$obj->uninstall();
+		}
 	}
 
-	/**
-	 * @func 返回video xml
-	 * @param 通过上传多媒体文件,得到id
-	 * @param 缩图的媒体ID,通过上传多媒体文件,得到的id
-	 * @ret string xml
-	 */
-	public function toMsgVideo($media_id, $thumb_media_id){
-		return $this->obj->toMsgVideo($media_id, $thumb_media_id);
+
+	public function __call($method, $args){
+		return call_user_func_array(array($this->obj, $method), $args);
 	}
 
- 	/**
-	 * @func 返回图文
-	 * @param array $info
-	 * @param array $array 
-	 * @ret string xml
-	 * exp
-	 * $textPic = array(
-			array(
-				'title'=> '标题',
-				'desc'=> '描述',
-				'pic'=> $this->bigPic(),//图片地址
-				'link'=>$pic,//图片链接地址
-			),//第一个图片为大图
-		);
-	//echo $this->toMsgTextPic($textPic);//图文
-	*/
-	public function toMsgTextPic($picTextInfo){
-  		return $this->obj->toMsgTextPic($picTextInfo);
-	}
+	
 }
 ?>

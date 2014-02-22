@@ -6,6 +6,7 @@ class weixin_robot_api_wordpress_dbs{
 	public $table_name =  'midoks_weixin_robot';//数据库表名(记录)
 	public $table_name_menu = 'midoks_weixin_robot_menu';//自定义菜单(自定义)
 	public $table_self_keyword = 'midoks_weixin_robot_replay';//自定义关键字回复(自定义)
+	public $table_extends = 'midoks_weixin_robot_extends';//自定义扩展
 	
 	//数据库实例
 	public $linkID;
@@ -125,6 +126,8 @@ class weixin_robot_api_wordpress_dbs{
 		return $this->linkID->query($sql);
 	}
 
+	
+
 	//插入值
 	public function insert_menu($menu_name, $menu_type, $menu_key, $menu_callback, $pid){
 		$sql = "INSERT INTO `{$this->table_name_menu}` (`id`, `menu_name`, `menu_type`, `menu_key`, `menu_callback`, `pid`)"
@@ -152,6 +155,77 @@ class weixin_robot_api_wordpress_dbs{
 	//清空数据
 	public function clear_menu(){
 		$sql = 'truncate '.$this->table_name_menu;
+		return $this->linkID->query($sql);
+	}
+
+	public function create_extends(){
+		$sql = "create table if not exists `{$this->table_extends}`(
+			`id` int(10) not null auto_increment comment '自增ID',
+			`ext_name` varchar(255) not null comment '扩展名',
+			`ext_type` varchar(100) not null comment '扩展类型',
+			`ext_int` int not null comment '是否启动',
+			primary key(`id`),
+			UNIQUE KEY `ext_name` (`ext_name`)
+			)engine=MyISAM default character set utf8 comment='微信机器人扩展管理' collate utf8_general_ci";
+		return $this->linkID->query($sql);
+	}
+
+	public function select_extends(){
+		$sql = "select `id`,`ext_name`,`ext_type`,`ext_int` from `{$this->table_extends}`";
+		$data  = $this->linkID->get_results($sql);
+		if($data){
+			$ret = array();
+			foreach($data as $k=>$v){
+				$a['ext_name'] = $v->ext_name;
+				$a['ext_type'] = $v->ext_type;
+				$ret[] = $a;
+			}
+			return $ret;
+		}
+		return false;
+	}
+
+	public function select_extends_name($name){
+		$sql = "select `id`,`ext_name`,`ext_type`,`ext_int` from `{$this->table_extends}` where ext_name='{$name}'";
+		$data = $this->linkID->query($sql);
+		return $data;
+	}
+
+	public function select_extends_type($type){
+		$sql = "select `id`,`ext_name`,`ext_type`,`ext_int` from `{$this->table_extends}` where ext_type='{$type}'";
+		$data = $this->linkID->get_results($sql);
+		if($data){
+			$ret = array();
+			foreach($data as $k=>$v){
+				$a['ext_name'] = $v->ext_name;
+				$a['ext_type'] = $v->ext_type;
+				$ret[] = $a;
+			}
+			return $ret;
+		}
+		return false;
+	}
+
+	//插入值
+	public function insert_extends($ext_name, $ext_type, $ext_int){
+		$sql = "INSERT INTO `{$this->table_extends}` (`id`, `ext_name`, `ext_type`, `ext_int`)"
+			." VALUES(null,'{$ext_name}','{$ext_type}','{$ext_int}')";
+		return $this->linkID->query($sql);
+	}
+
+	//删除数据表
+	public function delete_extends(){
+		$sql = 'DROP TABLE IF EXISTS '.$this->table_extends;
+		return $this->linkID->query($sql);
+	}
+
+	public function delete_extends_name($name){
+		$sql = 'delete from `'.$this->table_extends."` where `ext_name`='{$name}'";
+		return $this->linkID->query($sql);
+	}
+
+	public function clear_extends(){
+		$sql = 'truncate '.$this->table_extends;
 		return $this->linkID->query($sql);
 	}
 
