@@ -35,7 +35,7 @@ An answer to that question.
 
 == Changelog ==
 
-<strong>微信机器人使用</strong>
+ * <strong>微信机器人使用</strong>
  * 被动回复消息:
 
 1. 回复?,返回帮助信息(在设置中可改)
@@ -64,15 +64,13 @@ An answer to that question.
 1. 有时间再优化了。
 
  * 微信机器人扩展功能(有开发能力的)
-
 1. 阅读extends目录中readme.txt内容
 
  * 检测是否能正常通信
-
 1. 有人使用了插件,却无法使用(根据我的经验测试得出,你的rewrite配置可能有错)。
 2. 详情请阅读:微信机器人测试.txt
-程序调式
 
+ * 程序调式
 1. 在设置中开启调试模式.
 2. http://youdomain/?midoks&debug=true&kw=?
 
