@@ -31,7 +31,7 @@ An answer to that question.
 
 == Screenshots ==
 
-1.Menu Update 
+1. Menu Update 
 2. 
 
 == Changelog ==
