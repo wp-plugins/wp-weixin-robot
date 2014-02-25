@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 Plugin Name: WP微信机器人
 Plugin URI: http://midoks.cachecha.com/
