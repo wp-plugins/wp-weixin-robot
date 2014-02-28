@@ -43,9 +43,9 @@ see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
 
 == Frequently asked questions ==
 
-= A question that someone might have =
-
-An answer to that question.
+== 问题是无尽的 ==
+* 加我的QQ群:34063439
+* 关注我的博客:midoks.cachecha.com
 
 == Screenshots ==
 
