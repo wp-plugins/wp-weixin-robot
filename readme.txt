@@ -23,6 +23,22 @@ May use the advanced interface (https://api.weixin.qq.com/).
 3. 在微信后台，将接口配置信息中的 URL 设置为：http://你博客地址/?midoks 
 4. Token 设置为:midoks
 
+= now =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv4-1.html
+
+= 4.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv4.html
+
+= 3.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv3.html
+
+= 2.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv2.html
+
+= 1.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
+
+
 == Frequently asked questions ==
 
 = A question that someone might have =
