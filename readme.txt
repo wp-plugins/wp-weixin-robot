@@ -16,6 +16,21 @@ Weixin connected to the WordPress, use the information you faster
 By weixin APP (weixin.qq.com) information coming through the wordpress plugin wp-weixin-robot call back information. 
 May use the advanced interface (https://api.weixin.qq.com/).
 
+= now =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv4-1.html
+
+= 4.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv4.html
+
+= 3.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv3.html
+
+= 2.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv2.html
+
+= 1.0 =
+see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
+
 == Installation ==
 
 1. 上传到 `/wp-content/plugins/` 目录
