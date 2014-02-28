@@ -31,8 +31,13 @@ An answer to that question.
 
 == Screenshots ==
 
-1.Menu Update 
-2. 
+1. 如何与微信连接
+2. 后台介绍使用
+3. 配置界面
+4. 通信记录界面
+5. 自定义关键回复设置
+6. 菜单设置
+7. 扩展管理
 
 == Changelog ==
 
