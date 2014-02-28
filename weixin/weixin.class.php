@@ -47,7 +47,7 @@ class weixin{
 
 	// response message (music)	
 	public function toMsgMusic($fromUserName, $toUserName, $Title, $Description, $MusicUrl, $HQMusicUrl, $ThumbMediaId){
-		return $this->template->toMsgVoice($fromUserName, $toUserName, $Title, $Description, $MusicUrl, $HQMusicUrl, $ThumbMediaId);
+		return $this->template->toMsgMusic($fromUserName, $toUserName, $Title, $Description, $MusicUrl, $HQMusicUrl, $ThumbMediaId);
 	}
 
 	// response message (video)	

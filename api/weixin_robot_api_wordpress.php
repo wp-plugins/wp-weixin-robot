@@ -272,10 +272,51 @@ class weixin_robot_api_wordpress{
 		return $this->obj->toMsgTextPic($info);//图文
 	}
 
+	public function QidResult($id){
+		$wp = new WP_query('p='.$id);
+		$info = array();
+		
+		while($wp->have_posts()){$wp->the_post();
+			$a['title'] = get_the_title();
+			$a['desc'] = get_the_content();
+			$a['pic'] = get_the_content();
+			$a['link'] = get_permalink();
+			$info = $a;
+		}
+		return $info;
+	}
+
+	public function Qids($id){
+		$string = array();
+		$i = 0;
+		foreach($id as $k){
+			$res = $this->QidResult($k);
+			if($res){
+				++$i;
+				if(1 == $i){
+					$a['title'] = $res['title'];
+					$a['desc'] = $this->head_one_line($res['desc']);
+					$a['pic'] = $this->get_opt_pic_big($res['desc']);
+					$a['link'] = $res['link'];
+				}else{
+					$a['title'] = $res['title'];
+					$a['desc'] = $res['desc'];
+					$a['pic'] = $this->get_opt_pic_small($res['desc']);
+					$a['link'] = $res['link'];
+				}
+			}
+			$string[] = $a;
+		}
+		return $this->obj->toMsgTextPic($string);//图文
+	}
 
 	//@param array $id 
-	public function Qids($id){
-		$wp = new WP_query(array('post__in'=>$id));
+	/*public function Qids($id){
+		$wp = new WP_query(array(
+				'post__in'=>$id,
+				//'showposts' => 10,			//调用的数量
+			)
+		);
 		$info = array();
 		$i = 0;
 		while($wp->have_posts()){$wp->the_post();
@@ -297,7 +338,7 @@ class weixin_robot_api_wordpress{
 			return false;
 		}
 		return $this->obj->toMsgTextPic($info);//图文
-	}
+	}*/
 
 	//获取分类列表
 	public function get_category_list(){
@@ -315,7 +356,6 @@ class weixin_robot_api_wordpress{
 
 		$a['title'] = '欢迎光临,点击喜欢的栏目';
 		$a['desc'] =  '介绍';
-		//$a['pic'] = $this->get_opt_pic_big(get_the_content());
 		$a['link'] = $posts_page;
 		$info[] = $a;
 
@@ -325,12 +365,10 @@ class weixin_robot_api_wordpress{
 				if($i==1){
 					$a['title'] = $v->name;
 					$a['desc'] =  $v->name;
-					//$a['pic'] = $this->get_opt_pic_big(get_the_content());
 					$a['link'] = "{$posts_page}?cat={$v->term_id}";
 				}else{
 					$a['title'] = $v->name;
 					$a['desc'] =  $v->name;
-					//$a['pic'] = $this->get_opt_pic_small(get_the_content());
 					$a['link'] = "{$posts_page}?cat={$v->term_id}";
 				}
 				$info[] = $a;
@@ -342,10 +380,38 @@ class weixin_robot_api_wordpress{
 		return $this->obj->toMsgTextPic($info);//图文
 	}
 
-	public function get_tag_list(){
+
+	public function get_tag_list($page = 1){
+		$total = $this->get_tag_list_page_total();
+		$page_num = ceil($total/10);
+
+		if('?'==$page){
+			$info = '共有标签'.$total.'个(每页10个标签),共有'.$page_num.'页标签';
+			return $this->obj->toMsgText($info);
+		}
+
+		
+		if($page<1){
+			$page = 1;
+		}else if($page > $page_num){
+			$info = '超出了标签查询页,回复#?,查看多少页标签';
+			return $this->obj->toMsgText($info);
+		}
+		return $this->get_tag_list_page(($page-1)*10);
+	}
+
+	public function get_tag_list_page_total(){
+		global $wpdb;
+		$sql = "SELECT count(t.term_id) as c FROM {$wpdb->terms} as t,
+			{$wpdb->term_taxonomy} as tt WHERE t.term_id = tt.term_id and tt.taxonomy='post_tag' order by t.term_id";
+		$res = $wpdb->get_results($sql);
+		return $res[0]->c;
+	}
+
+	public function get_tag_list_page($pages = 0){
 		global $wpdb;
 		$sql = "SELECT t.term_id, t.name FROM {$wpdb->terms} as t,
-			{$wpdb->term_taxonomy} as tt WHERE t.term_id = tt.term_id and tt.taxonomy='post_tag'";
+			{$wpdb->term_taxonomy} as tt WHERE t.term_id = tt.term_id and tt.taxonomy='post_tag' order by t.term_id desc limit {$pages}, 10";
 		$res = $wpdb->get_results($sql);
 		
 		$posts_page = ('page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) )
@@ -353,15 +419,15 @@ class weixin_robot_api_wordpress{
 		$posts_page = esc_url($posts_page);
 
 		$info = array();
-
 		if($res){
 			foreach($res as $k=>$v){
 				$a['title'] =  $v->name;
+				$a['desc'] =  $v->name;
 				$a['link'] = "{$posts_page}tag/{$v->name}";
 				$info[] = $a;
 			}
 		}
-		return $this->obj->toMsgTextAlink($info);
+		return $this->obj->toMsgTextPicList($info);
 	}
 
 	//@func 总文章数

@@ -459,7 +459,7 @@ EOT;
 			<td style='text-align:center;width:100px'>%s</td></tr>";
 		$tableBodyTpl = '';
 		$data = $db->weixin_get_data($paged);
-	
+
 		foreach($data as $k=>$v){
 				//var_dump($v);
 			$tableHeadTpl .= sprintf($tableTrTpl,   $v['id'], $v['to'], $v['from'],
@@ -564,7 +564,7 @@ EOT;
 	public function weixin_robot_setting_keyword_relpy_ajax_update(){
 		$id = $_POST['id'];
 		$keyword = $_POST['keyword'];
-		$reply = $_POST['reply'];
+		$reply = strip_tags($_POST['reply']);
 		$type = $_POST['type'];
 		//return json_encode($_POST);
 		$res = $this->db->change_reply($id, $keyword, $reply, $type);
@@ -752,7 +752,7 @@ STR;
 		$id = $_POST['id'];
 		$type = $_POST['type'];
 		$name = $_POST['name'];
-		$value = $_POST['value'];
+		$value = strip_tags($_POST['value']);
 		$res = $this->db->update_menu($id, $name, $type, $value);
 		if($res){
 			return 'ok';
@@ -969,7 +969,7 @@ STR;
 			if('del'==$ext_type){
 				$this->plugins->uninstall($ext_file);
 				$res = $this->db->delete_extends_name($ext_file);
-			}else if(in_array($ext_type, array('text', 'location', 'image', 'link', 'video','voice'))){
+			}else if(in_array($ext_type, array('text', 'location', 'image', 'link', 'video','voice', 'menu'))){
 				$this->plugins->install($ext_file);
 				$this->db->insert_extends($ext_file , $ext_type, '1');
 			}

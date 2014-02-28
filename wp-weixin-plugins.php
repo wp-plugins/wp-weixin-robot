@@ -13,7 +13,7 @@ class wp_weixin_plugins{
 	public function __construct($obj){
 		define('WEIXIN_PLUGINS', WEIXIN_ROOT.'extends/');
 		$this->obj = $obj;
-		$this->info = $this->obj->info;
+		$this->info = isset($this->obj->info) ? $this->obj->info : null;
 		$this->option = $this->obj->options;
 		$this->db = $this->obj->db;
 	}
@@ -39,6 +39,8 @@ class wp_weixin_plugins{
 			case 'location'	:	$res = $this->p_location($args);break;
 			//连接信息
 			case 'link'		: 	$res = $this->p_link($args);break;
+			//菜单插件
+			case 'menu'		:	$res = $this->p_menu($args);break;
 			//默认消息
 			default			:	$res = $this->p_text('');break;
 		}
@@ -126,6 +128,18 @@ class wp_weixin_plugins{
 		return false;
 	}
 
+	/**
+	 * @func 分离出菜单控制(本插件功能并不能做到100%,提供次接口,让你自己控制)
+	 * @param menu_name 菜单名字
+	 */
+	private function p_menu($menu_name){
+		if(empty($menu_name)){return false;}
+		if($data = $this->plugins_start('menu', $menu_name)){
+			return $data;
+		}
+		return false;
+	}
+
 	//插件启用
 	//返回数组
 	private function plugins_start($name, $args){
@@ -144,9 +158,7 @@ class wp_weixin_plugins{
 					$obj = new $cn($this);
 					$data = $obj->start($args);
 					if( $data )	return $data;
-				}
-				
-				
+				}	
 			}
 		}
 		return false;
