@@ -1,4 +1,7 @@
 <?php
+/**
+ * 图文实例
+ */
 class wpwx_text_exp2{
 
 	private $obj = null;
@@ -35,9 +38,6 @@ class wpwx_text_exp2{
 						'link' => '',//图片链接地址
 					)
 			);
-
-
-
 			return $this->obj->toMsgTextPic($textPic);
 		}
 		return false;

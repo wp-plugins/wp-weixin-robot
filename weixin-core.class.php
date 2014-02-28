@@ -37,8 +37,8 @@ class weixin_core{
 	 *	@param string $suffix (一般为"\r\n", 默认为空)
 	 *	@info 由(http://weibo.com/clothand)提供, 当然我做了优化
 	 *	@exp:
-	 *	$alink[]['link'] = 'midoks.cachecha.com';
-	 *	@alink[]['title'] = '你好';
+	 *	$alink[0]['link'] = 'midoks.cachecha.com';
+	 *	$alink[0]['title'] = '你好';
 	 */
 	public function toMsgTextAlink($alink, $suffix = ''){
 		$link_info = '';
@@ -55,6 +55,7 @@ class weixin_core{
 		return $this->toMsgText($link_info);
 	}
 
+	
 	/**
 	 * @func 返回图片信息(测试未成功)
  	 * @param $MediaId 图片信息
@@ -76,6 +77,7 @@ class weixin_core{
 	 //echo $this->toMsgVoice($MediaId);
 	 */
 	public function toMsgVoice($MediaId){
+		$this->replay_type = '声音回复';
 		return $this->obj->toMsgVoice($this->info['FromUserName'], $this->info['ToUserName'], $MediaId);
 	}
 
@@ -89,9 +91,9 @@ class weixin_core{
 	 * exp:
 	 //echo $this->toMsgVoice('声音','当男人好难！', $MusicUrl, $MusicUrl);//voice
 	 */
-	public function toMsgMusic($title, $desc, $MusicUrl, $HQMusicUrl){
-		$this->replay_type = '声音回复';
-		return $this->obj->toMsgMusic($this->info['FromUserName'], $this->info['ToUserName'], $title, $desc, $MusicUrl, $HQMusicUrl);
+	public function toMsgMusic($title, $desc, $MusicUrl, $HQMusicUrl, $ThumbMediaId=''){
+		$this->replay_type = '音乐回复';
+		return $this->obj->toMsgMusic($this->info['FromUserName'], $this->info['ToUserName'], $title, $desc, $MusicUrl, $HQMusicUrl, $ThumbMediaId);
 	}
 
 	/**
@@ -158,6 +160,26 @@ class weixin_core{
   		return $this->obj->toMsgNews($fromUserName, $toUserName, $picTextInfo);
 	}
 
+	/**
+	 * 在客服端列表的展示形式
+	 *
+	 *  $list[0]['title'] = '0';
+	 *	$list[0]['desc'] =  '0';
+	 *	$list[0]['link'] = "http://midok.cachecha.com/";
+	 */
+	public function toMsgTextPicList($list){
+		$info = array();
+		foreach($list as $k=>$v){
+			$a['title'] = $v['title'];
+			$a['desc'] =  $v['desc'];
+			$a['link'] = $v['link'];
+			$info[] = $a;
+		}
+		return $this->toMsgTextPic($info);//图文
+	}
+
+
+//
 	public function getReToken(){
 		$data = $this->obj->getToken();
 		$data = json_decode($data, true);
@@ -169,7 +191,8 @@ class weixin_core{
 	
 	public function getToken(){
 		if(empty($this->options['ai']) || empty($this->options['as'])){
-			$this->notice('请填写服务号完整信息!!!');exit;
+			//$this->notice('请填写服务号完整信息!!!');
+			exit('请填写服务号完整信息!!!');
 		}
 
 		if(!empty($this->options['weixin_robot_token'])){
@@ -232,7 +255,6 @@ class weixin_core{
 	}
 
 	public function pushMsgImageAdv($open_id, $file){
-		var_dump(64*1024);
 		if(filesize($file) > 131072){
 			return '{errcode: "file size too big"}';
 		}
@@ -304,7 +326,7 @@ class weixin_core{
 		return $this->obj->upload($token, $type, $file);
 	}
 
-	public function uploadUrl($type, $url){
+	/*public function uploadUrl($type, $url){
 		$token = $this->getToken();
 		$content = file_get_contents($url, false, stream_context_create(array('http'=> array('timeout'=> 10))));
 		//var_dump($content);
@@ -313,7 +335,7 @@ class weixin_core{
 		$mime = mime_content_type($fn);
 		$mime = "image/jpeg";
 		return $this->obj->uploadUrl($token, $type, $fn, $mime, $content);
-	}
+	}*/
 
 //user info about
 	public function getUserInfo($open_id){
@@ -389,7 +411,11 @@ class weixin_core{
 			}
 		}
 		return $ret;
-	}	
+	}
+
+	public function to_json($arr){
+		return $this->obj->to_json($arr);
+	}
 
 }
 ?>

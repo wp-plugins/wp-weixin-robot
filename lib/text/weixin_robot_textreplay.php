@@ -7,7 +7,7 @@ class weixin_robot_textreplay{
 	public $obj = null;
 	public $kw = '';//关键字
 
-	public $list_cmd = array('#', '@','today','n', 'h', 'r', '?');
+	public $list_cmd = array('$', '#', '@','today','n', 'h', 'r', '?');
 
 	/**
 	 *	@func 构造函数
@@ -97,7 +97,7 @@ class weixin_robot_textreplay{
 			foreach($data as $k=>$v){
 				if('1' == $v['status']){
 					if($kw == $v['keyword'] && 'text' == $v['type']){
-						if(in_array($v['relpy'], $this->list_cmd)){
+						if(in_array($v['relpy'], $this->list_cmd) || in_array(substr($kw,0,1), $this->list_cmd)){
 							return $this->wordpress_cmd($v['relpy']);
 						}else{
 							return $this->obj->toMsgText($v['relpy']);
@@ -145,6 +145,7 @@ class weixin_robot_textreplay{
 			case 'n': $res = $wp->news($int);break;
 			case 'h': $res = $wp->hot($int);break;
 			case 'r': $res = $wp->rand($int);break;
+			case '#': $res = $wp->get_tag_list($suffix);break;
 			default: break;
 		}
 
@@ -153,8 +154,7 @@ class weixin_robot_textreplay{
 		}
 
 		switch($kw){
-			case '@'		: $res = $wp->get_category_list();break;
-			case '#'		: $res = $wp->get_tag_list();break;
+			case '@'		: $res = $wp->get_category_list();break;	
 			case 'today'	: $res = $wp->today();break;
 			case 'p?'		: $res = $wp->total();break;
 			default			: $res = $wp->pageView($kw);break;

@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 Plugin Name: WP微信机器人
 Plugin URI: http://midoks.cachecha.com/
@@ -26,7 +26,8 @@ define('WEIXIN_ROOT_POS' , __FILE__);
 //定义微信 Token
 define('WEIXIN_TOKEN', 'midoks');
 
-add_action('pre_get_posts', 'weixin_robot_start', 4);
+//add_action('pre_get_posts', 'weixin_robot_start', 4);
+add_action('init', 'weixin_robot_start', 1);
 //微信机器人服务开始启用
 function weixin_robot_start($wp_query){
 	if(isset($_GET['midoks']) ){//sign

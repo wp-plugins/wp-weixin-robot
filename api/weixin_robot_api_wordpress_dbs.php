@@ -82,6 +82,8 @@ class weixin_robot_api_wordpress_dbs{
 		return $this->linkID->query($sql);
 	}
 
+
+
 	//插入数据
 	public function insert_relpy($keyword, $relpy, $status, $time, $type){
 		$sql = "INSERT INTO `{$this->table_self_keyword}` (`id`, `keyword`, `relpy`, `status`, `time`, `type`) VALUES(null,'{$keyword}','{$relpy}','{$status}', '{$time}', '{$type}')";
@@ -112,7 +114,12 @@ class weixin_robot_api_wordpress_dbs{
 		return $this->linkID->query($sql);
 	}
 
-		//创建菜单同步表
+	public function change_reply($id, $keyword, $relpy, $type){
+		$sql = "UPDATE `{$this->table_self_keyword}` SET `keyword`='{$keyword}',`relpy`='{$relpy}',`type`='{$type}' WHERE `id`='{$id}'";
+		return $this->linkID->query($sql);
+	}
+
+	//创建菜单同步表
 	public function create_table_menu(){
 		$sql = "create table if not exists `{$this->table_name_menu}`(
 			`id` int(10) not null auto_increment comment '自增ID',
@@ -126,7 +133,10 @@ class weixin_robot_api_wordpress_dbs{
 		return $this->linkID->query($sql);
 	}
 
-	
+	public function update_menu($id, $name, $type, $value){
+		$sql = "update {$this->table_name_menu} set menu_name='{$name}', menu_type='{$type}', menu_callback='{$value}' where id='{$id}'";
+		return $this->linkID->query($sql);
+	}
 
 	//插入值
 	public function insert_menu($menu_name, $menu_type, $menu_key, $menu_callback, $pid){
@@ -156,6 +166,18 @@ class weixin_robot_api_wordpress_dbs{
 	public function clear_menu(){
 		$sql = 'truncate '.$this->table_name_menu;
 		return $this->linkID->query($sql);
+	}
+
+	public function select_menu_key($key){
+		$sql = "select `id`,`menu_name`, `menu_type`, `menu_key`, `menu_callback`, `pid`"
+			." from `{$this->table_name_menu}` where `menu_key`='{$key}' limit 1";
+		$data  = $this->linkID->get_results($sql);
+		if(empty($data)){
+			return false;
+		}else{
+			return $data[0]->menu_name;
+		}	
+		return false;
 	}
 
 	public function create_extends(){
@@ -253,7 +275,7 @@ class weixin_robot_api_wordpress_dbs{
 		$sql = "select `id`,`from`,`to`,`msgtype`,`createtime`,`content`,`picurl`,`location_x`,`location_y`, `scale`, `label`, `title`,"
 			."`description`,`url`,`event`, `eventkey`,`format`,`recognition`,`mediaid`,`thumbmediaid`,`response`"
 			." from `{$this->table_name}` order by `id` desc limit {$start},{$num}";
-		$data  = $this->linkID->get_results($sql);
+		$data  = @$this->linkID->get_results($sql);
 		$newData = array();
 		foreach($data as $k=>$v){
 			$arr = array();
@@ -266,6 +288,15 @@ class weixin_robot_api_wordpress_dbs{
 			switch($v->msgtype){
 				case 'text':$arr['content'] = $v->content;break;
 				default:$arr['content'] = $v->content;
+			}
+
+			if('CLICK' == $v->event){
+				$data = $this->select_menu_key($v->eventkey);
+				if($data){
+					$arr['content'] = '菜单:'.$data;
+				}else{
+					$arr['content'] = '菜单:已经不存在';
+				}
 			}
 
 			$arr['createtime'] = date('Y-m-d H:i:s', $v->createtime);

@@ -85,7 +85,6 @@ EOF;
 		<Description><![CDATA[%s]]></Description>
 		<MusicUrl><![CDATA[%s]]></MusicUrl>
 		<HQMusicUrl><![CDATA[%s]]></HQMusicUrl>
-		<ThumbMediaId><![CDATA[%s]]></ThumbMediaId>
 	</Music>
 </xml>
 EOF;

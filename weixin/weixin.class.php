@@ -47,7 +47,7 @@ class weixin{
 
 	// response message (music)	
 	public function toMsgMusic($fromUserName, $toUserName, $Title, $Description, $MusicUrl, $HQMusicUrl, $ThumbMediaId){
-		return $this->template->toMsgVoice($fromUserName, $toUserName, $Title, $Description, $MusicUrl, $HQMusicUrl, $ThumbMediaId);
+		return $this->template->toMsgMusic($fromUserName, $toUserName, $Title, $Description, $MusicUrl, $HQMusicUrl, $ThumbMediaId);
 	}
 
 	// response message (video)	
@@ -227,6 +227,10 @@ class weixin{
 		return $this->base->movUserGroup($token, $json);
 	}
 
+
+	public function to_json($arr){
+		return $this->base->to_json($arr);
+	}
 
 	public function notice($msg, $line){
 		if(WEIXIN_DEBUG){

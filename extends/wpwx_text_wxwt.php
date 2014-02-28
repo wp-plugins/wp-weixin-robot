@@ -21,10 +21,12 @@ class wpwx_text_wxwt{
 		return false;
 	}
 
+	//启动时,运行
 	public function install(){
 		
 	}
 
+	//卸载时运行
 	public function uninstall(){
 		
 	}
