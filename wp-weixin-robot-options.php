@@ -902,6 +902,7 @@ STR;
 		echo '<td><input type="text" name="weixin_robot_menu[value]" value="" size="35"></input><br />';
 		echo '<p>如果选择"URL"选项,应该填写网址: http://midoks.cachecha.com/</p>';
 		echo '<p>如果选择"点击"选项,可以是使用@(分类信息),#(标签信息),today(今日发布),n(1-10)最新信息, h(1-10)热门信息, r(1-10)随机信息, ?(帮助信息)等内置命令!!</p>';
+		echo '<p style="color:red">如果回复内容在关键字设置了, 就会返回关键字的回复信息!</p>';
 		echo '<p>不满足上面的话,则会返回文本信息</p>';
 		echo '</td></tr>';
 
