@@ -36,7 +36,7 @@ class weixin_robot_event{
 		$label = $this->cmd->info['Label'];
 
 		if(empty($latitude)){
-			return $this->cmd->toMsgText('没有获取你的数据...!!!');
+			//return $this->cmd->toMsgText('没有获取你的数据...!!!');
 		}
 
 		include(WEIXIN_ROOT_API.'weixin_robot_api_weather.php');
