@@ -97,14 +97,14 @@ class weixin_robot_textreplay{
 			foreach($data as $k=>$v){
 				if('1' == $v['status']){
 					if($kw == $v['keyword'] && 'text' == $v['type']){
-						if(in_array($v['relpy'], $this->list_cmd) || in_array(substr($kw,0,1), $this->list_cmd)){
+						if(in_array($v['relpy'], $this->list_cmd) || in_array(substr($v['relpy'], 0, 1), $this->list_cmd)){
 							return $this->wordpress_cmd($v['relpy']);
 						}else{
 							return $this->obj->toMsgText($v['relpy']);
 						}
 					}else if($kw == $v['keyword'] && 'id' == $v['type']){
-						if(in_array($v['relpy'], $this->list_cmd) || in_array(substr($kw,0,1), $this->list_cmd)){//这是为兼容错误
-							return $this->wordpress_cmd($v['relpy']);
+						if(in_array($v['relpy'], $this->list_cmd) || in_array(substr($v['relpy'], 0, 1), $this->list_cmd)){
+							return $this->wordpress_cmd($v['relpy']);//这是为兼容错误
 						}else{
 							if(count($idsc = explode(',', $v['relpy']))>1){
 								$data = $this->obj->wp_db->Qids($idsc);
@@ -113,8 +113,6 @@ class weixin_robot_textreplay{
 							}
 							return $data;
 						}
-					}else{
-						return false;
 					}
 				}
 			}
