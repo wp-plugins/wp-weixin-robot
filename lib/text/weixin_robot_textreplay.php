@@ -113,8 +113,6 @@ class weixin_robot_textreplay{
 							}
 							return $data;
 						}
-					}else{
-						return false;
 					}
 				}
 			}
