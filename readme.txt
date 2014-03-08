@@ -4,7 +4,7 @@ Donate link: https://me.alipay.com/midoks
 Tags: weixin robot
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag:5.1.8
+Stable tag: 5.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,13 +18,13 @@ May use the advanced interface (https://api.weixin.qq.com/).
 
 
 = 5.1.8 =
-see:http://midoks.cachecha.com/?p=69
+see: http://midoks.cachecha.com/?p=69
 
 = 5.0 = 
-see:http://midoks.cachecha.com/p/wp_plugin_weixin_robotv5.html
+see: http://midoks.cachecha.com/p/wp_plugin_weixin_robotv5.html
 
 = 5.0 chat =
-see:http://midoks.cachecha.com/p/wp_plug_weixin_robotv5chat.html
+see: http://midoks.cachecha.com/p/wp_plug_weixin_robotv5chat.html
 
 = 4.1 =
 see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_robotv4-1.html
