@@ -141,6 +141,8 @@ class weixin_robot_textreplay{
 		}
 		*/
 
+		//大小写不区分
+		$prefix = strtolower($prefix);
 		switch($prefix){
 			case 'n': $res = $wp->news($suffix);break;
 			case 'h': $res = $wp->hot($suffix);break;
