@@ -237,7 +237,7 @@ class wp_weixin_plugins{
 		}
 
 		$e = trim(trim($info[1], '*'));
-		$list = explode("\r\n", $e);
+		$list = explode("\n", $e);
 		$nString = array();
 
 		foreach($list as $k=>$v){
