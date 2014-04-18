@@ -16,6 +16,8 @@ Weixin connected to the WordPress, use the information you faster
 By weixin APP (weixin.qq.com) information coming through the wordpress plugin wp-weixin-robot call back information. 
 May use the advanced interface (https://api.weixin.qq.com/).
 
+= 5.2.8 =
+http://midoks.duapp.com/?p=73
 
 = 5.1.8 =
 see: http://midoks.cachecha.com/?p=69
