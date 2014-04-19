@@ -136,7 +136,7 @@ see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
 2. http://youdomain/?midoks&debug=true&kw=?
 
 * 感谢捐助我的的人(不分先后):
-周东飞、李攀、张伟丁、林春泉
+周东飞、李攀、张伟丁、林春泉、李茂峰
 
 
 
