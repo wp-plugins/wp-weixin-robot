@@ -335,10 +335,11 @@ class wp_weixin_plugins{
 	private function _c($f){
 		$db = $this->obj->db;
 		if(!file_exists($f)){
+			$fn = basename($f);
 			$db->delete_extends_name($fn);
 			return false;
 		}else{
-			include_once($abspath);
+			include_once($f);
 			return true;
 		}
 	}
