@@ -11,11 +11,11 @@ class wp_weixin_lock{
 	public function __construct(){	
 		switch($this->conf['link']){
 			case 'memcache':
-				include(WEIXIN_ROOT.'lock/wp_weixin_memcache.php');
+				include_once(WEIXIN_ROOT.'lock/wp_weixin_memcache.php');
 				$this->linkID = new wp_weixin_memcache_lock();break;
 			case 'mysql':
 			default:
-				include(WEIXIN_ROOT.'lock/wp_weixin_mysql.php');
+				include_once(WEIXIN_ROOT.'lock/wp_weixin_mysql.php');
 				$this->linkID = new wp_weixin_mysql_lock();
 				break;
 		}
