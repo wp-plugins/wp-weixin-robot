@@ -9,6 +9,13 @@ class weixin_robot{
 
 	public $cmd;//命令
 
+	public function __construct(){
+		//以上为测试和实例
+		include_once(WEIXIN_ROOT_LIB.'weixin_cmd.php');
+		//实例化
+		$this->cmd = new weixin_cmd();
+	}
+
 	//@func 机器人功能验证和返回信息
 	public function valid(){
 		if(isset($_GET['debug'])){
@@ -50,11 +57,11 @@ class weixin_robot{
 
 	//返回的信息
 	public function responseMsg(){
-		//以上为测试和实例
-		include(WEIXIN_ROOT_LIB.'weixin_cmd.php');
-		//实例化
-		$cmd = new weixin_cmd();
-		echo $cmd->cmd();
+		echo $this->cmd->cmd();
+	}
+
+	public function font(){
+		$this->cmd->font();
 	}
 
 }

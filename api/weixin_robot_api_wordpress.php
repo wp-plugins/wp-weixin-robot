@@ -330,38 +330,6 @@ class weixin_robot_api_wordpress{
 		return $this->obj->toMsgTextPic($string);//图文
 	}
 
-	//@param array $id 
-	/*
-	public function Qids($id){
-		$wp = new WP_query(array(
-				'post__in'=>$id,
-				//'showposts' => 10,			//调用的数量
-			)
-		);
-		$info = array();
-		$i = 0;
-		while($wp->have_posts()){$wp->the_post();
-			++$i;
-			if($i==1){
-				$a['title'] = get_the_title();
-				$a['desc'] = $this->head_one_line(get_the_content());
-				$a['pic'] = $this->get_opt_pic_big(get_the_content());
-				$a['link'] = get_permalink();
-			}else{
-				$a['title'] = get_the_title();
-				$a['desc'] = get_the_title();
-				$a['pic'] = $this->get_opt_pic_small(get_the_content());
-				$a['link'] = get_permalink();
-			}
-			$info[] = $a;
-		}
-		if(empty($info)){
-			return false;
-		}
-		return $this->obj->toMsgTextPic($info);//图文
-	}
-	*/
-
 	/**
 	 *	获取分类,并实现翻页功能
 	 *	@param string $suffix 后面的内容(分类名!页数)
@@ -721,19 +689,25 @@ class weixin_robot_api_wordpress{
 			}
 			return $this->obj->toMsgText("~{$key}~关键字,没有第{$sign}页!!!");
 		}
+
+		$posts_page = ('page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) )
+			? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/' );
+		$posts_page = esc_url($posts_page);
+
 		//var_dump($res);
 		$info = array();
 		foreach($res as $k=>$v){
+			//var_dump($v);
 			if($k==0){
 				$a['title'] = $v->post_title;
 				$a['desc'] = $this->head_one_line($v->post_content);
 				$a['pic'] = $this->get_opt_pic_big($v->post_content);
-				$a['link'] = $v->guid;
+				$a['link'] = $posts_page.'?p='.$v->ID;
 			}else{
 				$a['title'] = $v->post_title;
 				$a['desc'] = $v->post_title;
 				$a['pic'] = $this->get_opt_pic_small($v->post_content);
-				$a['link'] = $v->guid;
+				$a['link'] = $posts_page.'?p='.$v->ID;
 			}
 			$info[] = $a;
 		}
@@ -761,7 +735,7 @@ class weixin_robot_api_wordpress{
 			$limit = "limit {$p},5";
 		}
 	
-		$sql = "SELECT p.post_title,p.guid,p.post_content from {$wpdb->posts} p ".
+		$sql = "SELECT p.ID,p.post_title,p.guid,p.post_content from {$wpdb->posts} p ".
 			"where p.post_status='publish' ".
 			"and 1=1 ".
 			//关键字处

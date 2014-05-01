@@ -291,12 +291,17 @@ class Weixin_BaseCore{
 
 	//user info about
 	public function getUserInfo($token, $open_id){
+	
 		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={$token}&openid={$open_id}";
 		return $this->get($url);
 	}
 
 	public function getUserList($token, $next_openid){
-		$url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token={$token}&next_openid={$next_openid}";
+		if(empty($open_id)){
+			$url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token={$token}";
+		}else{
+			$url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token={$token}&next_openid={$next_openid}";
+		}
 		return $this->get($url);
 	}
 
@@ -325,19 +330,54 @@ class Weixin_BaseCore{
 		return $this->get($url, $json);
 	}
 
-	public function temp_ticket($token){
+	//创建临时二维码ticket
+	public function temp_ticket($token, $json){
 		$url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={$token}";
-		return $this->get($url);
+		return $this->get($url, $this->to_json($json));
 	}
 
-	public function permanent_ticket($token){
+	//创建永久二维码ticket
+	public function permanent_ticket($token, $json){
 		$url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={$token}";
-		return $this->get($url);
+		return $this->get($url, $this->to_json($json));
 	}
 
+	//通过ticket换取二维码
 	public function get_ticket($ticket){
 		$url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.$ticket;
 		return $url;
+	}
+
+	//上传图文消息素材
+	public function uploadMsgImageText($token, $msg){
+		$url = 'https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token='.$token;
+		$info['articles'] = $msg;
+		return $this->get($url, $this->to_json($info));
+	}
+
+	//通过分组进行群发
+	public function sendAllByGroup($token, $group_id, $media_id, $msgtype = 'mpnews'){
+		$msg['filter']['group_id'] = $group_id;
+		$msg['mpnews']['media_id'] = $media_id;
+		$msg['msgtype'] = $msgtype;
+		$url = 'https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token='.$token;
+		return $this->get($url, $this->to_json($msg));
+	}
+
+	//根据OpenID列表群发
+	public function sendAll($token, $user, $media_id, $msgtype = 'mpnews'){
+		$msg['touser'] = $user;
+		$msg['mpnews']['media_id'] = $media_id;
+		$msg['msgtype'] = $msgtype;
+		$url = 'https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token='.$token;
+		return $this->get($url, $this->to_json($msg));
+	}
+
+	//删除群发信息
+	public function deleteSend($token, $id){
+		$msg['msgid'] = $id;
+		$url = 'https://api.weixin.qq.com/cgi-bin/message/mass/delete?access_token='.$token;
+		return $this->get($url, $this->to_json($msg));
 	}
 
 	public function to_json($array){

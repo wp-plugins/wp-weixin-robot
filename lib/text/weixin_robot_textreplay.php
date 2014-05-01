@@ -33,6 +33,11 @@ class weixin_robot_textreplay{
 			return $wp_lock;
 		}
 
+		//插件接口调用
+		if($wp_plugins = $this->obj->plugins->dealwith('text', $kw)){
+			return $wp_plugins;
+		}
+
 		if($kw == '?'){
 			return $this->obj->toMsgText($this->obj->options['weixin_robot_helper']);//显示帮助信息
 		}
@@ -49,11 +54,6 @@ class weixin_robot_textreplay{
 		//用户自定义关键字回复
 		if($user_cmd = $this->user_keyword_cmd($kw)){
 			return $user_cmd;
-		}
-
-		//插件接口调用
-		if($wp_plugins = $this->obj->plugins->dealwith('text', $kw)){
-			return $wp_plugins;
 		}
 
 		return $this->obj->helper();//显示帮助信息

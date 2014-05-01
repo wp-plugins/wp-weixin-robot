@@ -60,7 +60,7 @@ class weixin{
 	}
 
 	// response message (news)	
-	public function toMsgNews($fromUserName, $toUserName, Array $News){
+	public function toMsgNews($fromUserName, $toUserName, $News){
 			return $this->template->toMsgNews($fromUserName, $toUserName, $News);
 	}
 //END TO MSG
@@ -233,13 +233,13 @@ class weixin{
 
 
 	//创建二维码ticket
-	public function temp_ticket($token){
-		return $this->base->temp_ticket($token);	
+	public function temp_ticket($token, $json){
+		return $this->base->temp_ticket($token, $json);	
 	}
 
 	//创建永久二维码ticket
-	public function permanent_ticket($token){
-		return $this->base->permanent_ticket($token);
+	public function permanent_ticket($token, $json){
+		return $this->base->permanent_ticket($token, $json);
 	}
 
 	//返回路径
@@ -247,6 +247,27 @@ class weixin{
 		return $this->base->get_ticket($ticket);
 	}
 
+//推送消息
+	
+	//上传图文消息素材	
+	public function uploadMsgImageText($token, $msg){
+		return $this->base->uploadMsgImageText($token, $msg);
+	}
+
+	//通过分组进行群发
+	public function sendAllByGroup($token, $group_id, $media_id){
+		return $this->base->sendAllByGroup($token, $group_id, $media_id);
+	}
+
+	//根据OpenID列表群发
+	public function sendAll($token, $user, $media_id){
+		return $this->base->sendAll($token, $user, $media_id);
+	}
+
+	//删除群发信息
+	public function deleteSend($token, $id){
+		return $this->base->deleteSend($token, $id);
+	}
 
 	public function to_json($arr){
 		return $this->base->to_json($arr);

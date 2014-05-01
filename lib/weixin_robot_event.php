@@ -47,10 +47,9 @@ class weixin_robot_event{
 
 	//用户已关注时的事件推送
 	public function scanEvent(){
-		return $this->cmd->toMsgText('谢谢再次关注!!');
+		if($wp_plugins = $this->cmd->plugins->dealwith('scan', $this->cmd->$info)){
+			return $wp_plugins;
+		}
 	}
-
-
-
 }
 ?>

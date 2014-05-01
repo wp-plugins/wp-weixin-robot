@@ -20,7 +20,7 @@ class wp_weixin_plugins{
 
 
 		//锁机制
-		include(WEIXIN_ROOT.'wp-weixin-lock.php');
+		include_once(WEIXIN_ROOT.'wp-weixin-lock.php');
 		$this->lock = new wp_weixin_lock();
 		$this->lock->set_obj($obj);
 	}
@@ -38,6 +38,8 @@ class wp_weixin_plugins{
 			case 'all'		:	$res = $this->p_all($args);break;
 			//订阅
 			case 'subscribe':	$res = $this->p_subscribe('');break;
+			//已经关注,并再次扫描事件
+			case 'scan'		:	$res = $this->p_scan($args);break;
 			//文本消息	
 			case 'text'		:	$res = $this->p_text($args);break;
 			//图片消息
@@ -72,6 +74,12 @@ class wp_weixin_plugins{
 	//订阅
 	private function p_subscribe($args){
 		if($data = $this->plugins_start('subscribe', $args)){
+			return $data;
+		}
+		return false;
+	}
+	private function p_scan($args){
+		if($data = $this->plugins_start('scan', $args)){
 			return $data;
 		}
 		return false;
@@ -183,8 +191,10 @@ class wp_weixin_plugins{
 					$tt = explode('.', $v['ext_name']);
 					$cn = $tt[0];
 					$obj = new $cn($this);
-					$data = $obj->start($args);
-					if( $data )	return $data;
+					if(method_exists($obj, 'start')){
+						$data = $obj->start($args);
+						if( $data )	return $data;
+					}
 				}	
 			}
 		}
@@ -217,9 +227,6 @@ class wp_weixin_plugins{
 		return $a;
 	}
 
-
-	
-
 	/*	解释说明
 	 *	extend_name:扩展名称
 	 *  plugin_url:开发扩展的地址
@@ -236,7 +243,7 @@ class wp_weixin_plugins{
 			return false;
 		}
 
-		$e = trim(trim($info[1], '*'));
+		$e = trim(trim($info[1]), '*');
 		$list = explode("\n", $e);
 		$nString = array();
 
@@ -248,12 +255,12 @@ class wp_weixin_plugins{
 			if(count($tmp_E)<2){
 				$tmp_E = explode(':', $tmp, 2);
 			}
-
 			
 			if(!empty($tmp_E[0])){
-				$nString[strtolower($tmp_E[0])] = $tmp_E[1];
+				$nString[strtolower($tmp_E[0])] = trim($tmp_E[1]);
 			}
 		}
+
 		//扩展名称(必选)
 		if(!isset($nString['extend_name'])){
 			return false;
@@ -296,15 +303,16 @@ class wp_weixin_plugins{
 	//插件安装
 	public function install($fn){
 		$abspath = WEIXIN_PLUGINS.$fn;
-		include_once($abspath);
-		$tt = explode('.', $fn);
-		$cn = $tt[0];
-		if(!class_exists($cn)){
-			$this->obj->notices('此文件下,类名有错!!!');exit;
-		}
-		$obj = new $cn($this);
-		if(method_exists($obj, 'install')){
-			return $obj->install();
+		if($this->_c($abspath)){
+			$tt = explode('.', $fn);
+			$cn = $tt[0];
+			if(!class_exists($cn)){
+				$this->obj->notices('此文件下,类名有错!!!');exit;
+			}
+			$obj = new $cn($this);
+			if(method_exists($obj, 'install')){
+				return $obj->install();
+			}
 		}
 		return false;
 	}
@@ -312,24 +320,52 @@ class wp_weixin_plugins{
 	//插件卸载
 	public function uninstall($fn){
 		$abspath = WEIXIN_PLUGINS.$fn;
-		include_once($abspath);
-		$tt = explode('.', $fn);
-		$cn = $tt[0];
-		$obj = new $cn($this);
-		if(method_exists($obj, 'uninstall')){
-			return $obj->uninstall();
+		if($this->_c($abspath)){
+			$tt = explode('.', $fn);
+			$cn = $tt[0];
+			$obj = new $cn($this);
+			if(method_exists($obj, 'uninstall')){
+				return $obj->uninstall();
+			}
+			return false;
 		}
-		return false;
+	}
+
+
+	private function _c($f){
+		$db = $this->obj->db;
+		if(!file_exists($f)){
+			$db->delete_extends_name($fn);
+			return false;
+		}else{
+			include_once($abspath);
+			return true;
+		}
 	}
 
 
 	//后台控制
 	public function admin($fn){
 		$abspath = WEIXIN_PLUGINS.$fn.'.php';
-		include_once($abspath);
-		$obj = new $fn($this);
-		if(method_exists($obj, 'admin')){
-			$obj->admin();
+		if($this->_c($abspath)){
+			$obj = new $fn($this);
+			if(method_exists($obj, 'admin')){
+				if(method_exists($obj, 'admin')){
+					$obj->admin();
+				}
+			}
+		}
+	}
+
+	public function font($fn){
+		$abspath = WEIXIN_PLUGINS.$fn.'.php';
+		if($this->_c($abspath)){
+			$obj = new $fn($this);
+			if(method_exists($obj, 'font')){
+				if(method_exists($obj, 'font')){
+					$obj->font();
+				}
+			}
 		}
 	}
 
@@ -408,7 +444,12 @@ class wp_weixin_plugins{
 			else
 				return call_user_func(array($this->lock, $method));
 		}
-		return call_user_func_array(array($this->obj, $method), $args);
+
+		if(!empty($args)){
+			return call_user_func_array(array($this->obj, $method), $args);
+		}else{
+			return call_user_func(array($this->obj, $method));
+		}
 	}
 
 	

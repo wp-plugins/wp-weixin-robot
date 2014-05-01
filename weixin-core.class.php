@@ -343,7 +343,7 @@ class weixin_core{
 		return $this->obj->getUserInfo($token, $open_id);
 	}
 
-	public function getUserList($next_openid){
+	public function getUserList($next_openid = ''){
 		$token = $this->getToken();
 		return $this->obj->getUserList($token, $next_openid);
 	}
@@ -371,6 +371,49 @@ class weixin_core{
 	public function movUserGroup($json){
 		$token = $this->getToken();
 		return $this->obj->movUserGroup($token, $json);
+	}
+
+	//创建二维码ticket
+	public function temp_ticket($json){
+		$token = $this->getToken();
+		return $this->obj->temp_ticket($token, $json);	
+	}
+
+	//创建永久二维码ticket
+	public function permanent_ticket($json){
+		$token = $this->getToken();
+		return $this->obj->permanent_ticket($token, $json);
+	}
+
+	//返回路径
+	public function get_ticket($ticket){
+		return $this->obj->get_ticket($ticket);
+	}
+
+//推送消息
+	
+	//上传图文消息素材	
+	public function uploadMsgImageText($msg){
+		$token = $this->getToken();
+		return $this->obj->uploadMsgImageText($token, $msg);
+	}
+
+	//通过分组进行群发
+	public function sendAllByGroup($group_id, $media_id){
+		$token = $this->getToken();
+		return $this->obj->sendAllByGroup($token, $group_id, $media_id);
+	}
+
+	//根据OpenID列表群发
+	public function sendAll($user, $media_id){
+		$token = $this->getToken();
+		return $this->obj->sendAll($token, $user, $media_id);
+	}
+
+	//删除群发信息
+	public function deleteSend($id){
+		$token = $this->getToken();
+		return $this->obj->deleteSend($token, $id);
 	}
 
 

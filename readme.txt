@@ -4,7 +4,7 @@ Donate link: https://me.alipay.com/midoks
 Tags: weixin robot
 Requires at least: 3.3
 Tested up to: 3.8.1
-Stable tag: 5.2.6
+Stable tag: 5.2.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,9 @@ Weixin connected to the WordPress, use the information you faster
 Weixin connected to the WordPress, use the information you faster
 By weixin APP (weixin.qq.com) information coming through the wordpress plugin wp-weixin-robot call back information. 
 May use the advanced interface (https://api.weixin.qq.com/).
+
+
+
 
 = 5.2.6 =
 http://midoks.duapp.com/?p=73
@@ -136,7 +139,7 @@ see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
 2. http://youdomain/?midoks&debug=true&kw=?
 
 * 感谢捐助我的的人(不分先后):
-周东飞、李攀、张伟丁、林春泉、高雅文化传播网、李茂峰
+周东飞、李攀、张伟丁、林春泉、高雅文化传播网、李茂峰、黄涛
 
 
 

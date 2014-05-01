@@ -13,9 +13,6 @@ class wp_weixin_lock{
 			case 'memcache':
 				include(WEIXIN_ROOT.'lock/wp_weixin_memcache.php');
 				$this->linkID = new wp_weixin_memcache_lock();break;
-			case 'memcache_bae':
-				include(WEIXIN_ROOT.'lock/wp_weixin_memcache_bae.php');
-				$this->linkID = new wp_weixin_memcache_bae_lock();break;
 			case 'mysql':
 			default:
 				include(WEIXIN_ROOT.'lock/wp_weixin_mysql.php');

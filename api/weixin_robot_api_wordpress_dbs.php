@@ -274,6 +274,9 @@ class weixin_robot_api_wordpress_dbs{
 	//@param uint $page_no 第几页数据
 	//@param uint $num 每页显示的数据
 	public function weixin_get_data($page_no = 1, $num = 20){
+		if($page_no < 1){
+			$page_no = 1;
+		}
 		$start = ($page_no-1)*$num;
 		$sql = "select `id`,`from`,`to`,`msgtype`,`createtime`,`content`,`picurl`,`location_x`,`location_y`, `scale`, `label`, `title`,"
 			."`description`,`url`,`event`, `eventkey`,`format`,`recognition`,`mediaid`,`thumbmediaid`,`response`, `response_time`"
@@ -307,11 +310,70 @@ class weixin_robot_api_wordpress_dbs{
 				$arr['content'] = '取消订阅事件';
 			}else if('LOCATION' == $v->event){
 				$arr['content'] = '地理位置上报告事件';
+			}else if('location' == $v->msgtype){
+				$arr['content'] = '地理位置上报告事件';
+			}else if('voice' == $v->msgtype){
+				$arr['content'] = '语音事件';
 			}
 
 			$arr['createtime'] = date('Y-m-d H:i:s', $v->createtime);
 			$arr['response'] = $v->response;
 			$arr['response_time'] = $v->response_time;
+			$newData[] = $arr;
+		}
+		return $newData;
+	}
+
+	//返回消息(用户推送的信息)
+	public function weixin_get_data_chat($openid, $time){
+		//现在到3秒前的数据
+		$s_time = $time-3;
+		$sql = "select `id`,`from`,`to`,`msgtype`,`createtime`,`content`,`picurl`,`location_x`,`location_y`, `scale`, `label`, `title`,"
+			."`description`,`url`,`event`, `eventkey`,`format`,`recognition`,`mediaid`,`thumbmediaid`,`response`, `response_time`"
+			." from `{$this->table_name}` where `from`='{$openid}' and (`createtime` >= '{$s_time}' and `createtime` <= '{$time}')  order by `id` desc";
+		//echo $sql;
+		$data  = @$this->linkID->get_results($sql);
+		$newData = array();
+		foreach($data as $k=>$v){
+			$arr = array();
+			$arr['id'] = $v->id;
+			$arr['from'] = $v->from;
+			$arr['to'] = $v->to;
+			$arr['msgtype'] = $v->msgtype;
+
+			//暂时显示文本消息
+			switch($v->msgtype){
+				case 'text':$arr['content'] = $v->content;break;
+				default:$arr['content'] = $v->content;
+			}
+
+			//菜单点击事件
+			if('CLICK' == $v->event){
+				$data = $this->select_menu_key($v->eventkey);
+				if($data){
+					$arr['content'] = '菜单:'.$data;
+				}else{
+					$arr['content'] = '菜单:已经不存在';
+				}
+			}else if('subscribe' == $v->event){//订阅事件
+				$arr['content'] = '订阅事件';
+			}else if('unsubscribe' == $v->event){//取消订阅事件
+				$arr['content'] = '取消订阅事件';
+			}else if('LOCATION' == $v->event){
+				$arr['content'] = '地理位置上报告事件';
+			}else if('location' == $v->msgtype){
+				$arr['content'] = '地理位置上报告事件';
+			}else if('voice' == $v->msgtype){
+				$arr['content'] = '语音事件';
+			}
+
+			$arr['createtime'] = date('Y-m-d H:i:s', $v->createtime);
+			$arr['response'] = $v->response;
+			$arr['response_time'] = $v->response_time;
+
+			//test
+			$arr['n_time'] = intval($v->createtime);
+			$arr['r_time'] = $time;
 			$newData[] = $arr;
 		}
 		return $newData;

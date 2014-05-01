@@ -13,7 +13,7 @@ class wp_weixin_mysql_lock{
 
 
 	public function __construct(){
-		include(WEIXIN_ROOT_API.'weixin_robot_api_lock.php');
+		include_once(WEIXIN_ROOT_API.'weixin_robot_api_lock.php');
 		$this->linkID = new weixin_robot_api_lock();
 		$this->expired_time = time() + 30*60;
 	}

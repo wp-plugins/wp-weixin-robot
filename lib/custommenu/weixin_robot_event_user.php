@@ -33,7 +33,7 @@ class weixin_robot_event_user{
 			return $wp_plugins;
 		}
 
-		include(WEIXIN_ROOT_LIB.'text/weixin_robot_textreplay.php');
+		include_once(WEIXIN_ROOT_LIB.'text/weixin_robot_textreplay.php');
 		if(in_array($case, $this->callback) || in_array(substr($case, 0, 1), $this->callback)){//预定义
 			$text = new weixin_robot_textreplay($this->obj, $case);
 			return $text->replay();
@@ -42,7 +42,7 @@ class weixin_robot_event_user{
 		}else{
 			$text = new weixin_robot_textreplay($this->obj, $case);
 			$data = $text->replay();
-			if(!empty($data)){
+			if(empty($data) || !$data){
 				return $this->obj->toMsgText($case);
 			}
 			return $data;

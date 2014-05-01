@@ -175,11 +175,15 @@ class weixin_robot_api_wordpress_options{
 				$a['desc'] = $this->head_one_line(get_the_content());
 				$a['pic'] = $this->get_opt_pic_big(get_the_content());
 				$a['link'] = get_permalink();
+				$a['author'] = get_the_author();
+				$a['content'] = get_the_content();
 			}else{
 				$a['title'] = get_the_title();
 				$a['desc'] = get_the_title();
 				$a['pic'] = $this->get_opt_pic_small(get_the_content());
 				$a['link'] = get_permalink();
+				$a['author'] = get_the_author();
+				$a['content'] = get_the_content();
 			}
 			$info[] = $a;
 		}
