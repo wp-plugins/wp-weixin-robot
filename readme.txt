@@ -17,7 +17,8 @@ By weixin APP (weixin.qq.com) information coming through the wordpress plugin wp
 May use the advanced interface (https://api.weixin.qq.com/).
 
 
-
+= 5.2.11 =
+http://midoks.cachecha.com/p/wp-weixin-robot-5-2-11.html
 
 = 5.2.6 =
 http://midoks.duapp.com/?p=73
