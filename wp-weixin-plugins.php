@@ -14,6 +14,7 @@ class wp_weixin_plugins{
 	public function __construct($obj){
 		define('WEIXIN_PLUGINS', WEIXIN_ROOT.'extends/');
 		$this->obj = $obj;
+
 		$this->info = isset($this->obj->info) ? $this->obj->info : null;
 		$this->option = $this->obj->options;
 		$this->db = $this->obj->db;
@@ -453,6 +454,35 @@ class wp_weixin_plugins{
 		}
 	}
 
-	
+	/**
+	 *	@func 获取接受的所有信息
+	 *	@ret array 返回所有的信息
+	 */
+	public function getAcceptInfo(){
+		return $this->obj->info;
+	}
+
+	/**
+	 * 	@func 获取本插件的所有配置信息
+	 *	@ret array 返回数组
+	 */
+	public function getConfigInfo(){
+		return $this->obj->options;
+	}
+
+	//用户OpenID
+	public function getUserOpenID(){
+		return $this->obj->info['FromUserName'];
+	}
+
+	//获取开发AppID
+	public function getAppID(){
+		return $this->obj->obj->app_id;
+	}
+
+	//获取开发AppSelect
+	public function getAppSelect(){
+		return $this->obj->obj->app_sercet;
+	}
 }
 ?>

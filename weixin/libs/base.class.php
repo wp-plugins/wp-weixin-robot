@@ -91,21 +91,75 @@ class Weixin_BaseCore{
 		return $this->get($url, json_encode($info));
 	}
 
-	//meun setting
+
+/**
+ *  多客服系统接口 start 
+ *	多客服系统是在的插件中使用!!!
+ */
+	
+	/**
+	 *	@func 获取客服聊天记录
+	 *	@param $token		调用接口凭证
+	 *	@param $open_id		普通用户的标识，对当前公众号唯一
+	 *	@param $starttime	查询开始时间，UNIX时间戳
+	 *	@param $endtime		查询结束时间，UNIX时间戳，每次查询不能跨日查询
+	 *	@param $pagesize	每页大小，每页最多拉取1000条
+	 *	@param $pageindex	查询第几页，从1开始	 
+	 */
+	public function getCustomServiceLog($token, $open_id, $starttime, $endtime, $pagesize=20, $pageindex=1){
+		$url = "https://api.weixin.qq.com/cgi-bin/customservice/getrecord?access_token={$token}";
+		$info['open_id'] = $open_id;
+		$info['starttime'] = $starttime;
+		$info['endtime'] = $endtime;
+		$info['pagesize'] = $pagesize;
+		$info['pageindex'] = $pageindex;
+		return $this->get($url, json_encode($info));
+	}
+/* 多客服系统接口 end */
+
+/* meun setting start */
+
+	//菜单获取
 	public function menuGet($token){
 		$url = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token={$token}";
 		return $this->get($url);
 	}
 
+	//设置菜单哪
 	public function menuSet($token, $json){
 		$url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token={$token}";
 		return $this->get($url, $json);
 	}
 
+	//删除菜单哪
 	public function menuDel($token){
 		$url = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token={$token}";
 		return $this->get($url);
 	}
+/* meun setting end */
+
+/* 智能接口 start */
+
+	/**
+     *  @func 智能语意接口
+     *	@ret string json
+	 */ 
+	public function getSemantic($token, $query, $category, $lat, $long, $city, $region, $appid, $uid){
+		$url = "https://api.weixin.qq.com/semantic/semproxy/search?access_token={$token}";
+		$info['query'] = $query;
+		$info['category'] = $category;
+		$info['lat'] = $lat;
+		$info['long'] = $long;
+		$info['city'] = $city;
+		$info['region'] = $region;
+		$info['appid'] = $appid;
+		$info['uid'] = $uid;
+		return $this->get($url, json_encode($info));
+	}
+	
+
+/* 智能接口 end */
+
 
 	//upload and download
 	public function download($token, $media_id){
@@ -244,7 +298,6 @@ class Weixin_BaseCore{
 		curl_setopt($go, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($go, CURLOPT_TIMEOUT, 30);
 
-
 		//curl_setopt($go, CURLOPT_CUSTOMREQUEST, 'POST');
 		curl_setopt($go, CURLOPT_POST, 1);
 		curl_setopt($go, CURLOPT_POSTFIELDS, $content);
@@ -254,7 +307,6 @@ class Weixin_BaseCore{
 	}
 
 	private function uploadContents3($url, $fn, $mime, $content){
-
 		$boundary = substr(md5(rand(0,32000)), 0, 10);
 		  
 		$data .= "--$boundary\n";
@@ -268,7 +320,6 @@ class Weixin_BaseCore{
 		$data .= $content."\n";
 		$data .= "--$boundary--\n";
 
-
 		$go = curl_init();
 		curl_setopt($go, CURLOPT_URL, $url);
 		curl_setopt($go, CURLOPT_HTTPHEADER, array("Content-Type: multipart/form-data; boundary=".$boundary,
@@ -280,7 +331,6 @@ class Weixin_BaseCore{
 		curl_setopt($go, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($go, CURLOPT_TIMEOUT, 30);
 
-
 		//curl_setopt($go, CURLOPT_CUSTOMREQUEST, 'POST');
 		curl_setopt($go, CURLOPT_POST, 1);
 		curl_setopt($go, CURLOPT_POSTFIELDS, $data);
@@ -289,10 +339,10 @@ class Weixin_BaseCore{
 		return $response;
 	}
 
-	//user info about
-	public function getUserInfo($token, $open_id){
+/* user info about  start */
+	public function getUserInfo($token, $open_id, $lang='zh_CN'){
 	
-		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={$token}&openid={$open_id}";
+		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={$token}&openid={$open_id}lang={$lang}";
 		return $this->get($url);
 	}
 
@@ -330,6 +380,18 @@ class Weixin_BaseCore{
 		return $this->get($url, $json);
 	}
 
+	public function updateRemark($token, $open_id, $remark){
+		$url = "https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token={$remark}";
+		$a['openid'] = $open_id;
+		$a['remark'] = $remark;
+		return $this->get($url, $this->to_json($a));
+	}
+
+
+/* user info about  start */
+
+/* 推广支持 start */
+
 	//创建临时二维码ticket
 	public function temp_ticket($token, $json){
 		$url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={$token}";
@@ -347,6 +409,16 @@ class Weixin_BaseCore{
 		$url = 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket='.$ticket;
 		return $url;
 	}
+
+	//把长连接转换为短链接
+	public function long2short($token, $url){
+		$array['access_token'] = $token;
+		$array['long_url'] = $url;
+		$array['action'] = 'long2short';
+		return $this->get("https://api.weixin.qq.com/cgi-bin/shorturl?access_token={$token}", $array);
+	}
+
+/* 推广支持 end */
 
 	//上传图文消息素材
 	public function uploadMsgImageText($token, $msg){
@@ -380,6 +452,19 @@ class Weixin_BaseCore{
 		return $this->get($url, $this->to_json($msg));
 	}
 
+	//发送模版消息
+	public function sendTemplateInfo($token, $json){
+		$url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$token;
+		return $this->get($url, $this->to_json($json));
+	}
+
+	//获取微信ip地址
+	public function getWeixinIp($token){
+		$url = 'https://api.weixin.qq.com/cgi-bin/getcallbackip?access_token='.$token;
+		return $this->get($url);
+	}
+
+	//转换json的数据
 	public function to_json($array){
         $this->arrayRecursive($array, 'urlencode', true);
         $json = json_encode($array);

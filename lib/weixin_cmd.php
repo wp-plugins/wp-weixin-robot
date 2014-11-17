@@ -132,6 +132,15 @@ class weixin_cmd extends weixin_core{
 
 		//事件
 		$event = isset($info['Event']) ? $info['Event']: '';
+
+		//事件中的特殊操作
+		if('TEMPLATESENDJOBFINISH'==$info['Event']){
+			$content = '模版发送返回消息'.$info['Status'];
+		}else if('MASSSENDJOBFINISH' == $info['Event']){
+			$content = '事件推送群发结果:'.$info['Status'].
+			'成功发送粉丝:'.$info['SentCount'].',失败发送粉丝:'.$info['ErrorCount'];
+		}
+
 		$eventkey = isset($info['EventKey']) ? $info['EventKey']: '';
 
 		//语音识别

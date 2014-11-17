@@ -3,7 +3,7 @@ WP微信机器人插件开发指南
 声明:
 	每个插件前前缀名为wpwx_(事件名)_(youname).php
 	事件名有:
-		all				所有信息
+		all			所有信息
 		text			文本信息
 		location		地理信息
 		image			图片信息

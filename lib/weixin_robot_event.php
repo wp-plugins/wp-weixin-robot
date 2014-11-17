@@ -51,5 +51,11 @@ class weixin_robot_event{
 			return $wp_plugins;
 		}
 	}
+
+	//模版消息返回信息(暂时不处理)
+	public function TEMPLATESENDJOBFINISHEvent(){}
+
+	//事件推送群发结果(暂时不处理)
+	public function MASSSENDJOBFINISHEvent(){}
 }
 ?>

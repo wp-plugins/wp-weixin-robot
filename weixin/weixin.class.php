@@ -19,6 +19,7 @@ class weixin{
 	public $app_sercet;
 
 
+	//构造函数
 	public function __construct($AppId='', $AppSecret=''){
 
 		$this->app_id = $AppId;
@@ -67,8 +68,6 @@ class weixin{
 
 
 //have appkey and appsercet
-
-
 	/**
 	 *	get token
 	 *  @ret json
@@ -165,6 +164,26 @@ class weixin{
 
 
 
+/**
+ *  多客服系统接口 start 
+ *	多客服系统是在的插件中使用!!!
+ */
+	
+	/**
+	 *	@func 获取客服聊天记录
+	 *	@param $token		调用接口凭证
+	 *	@param $open_id		普通用户的标识，对当前公众号唯一
+	 *	@param $starttime	查询开始时间，UNIX时间戳
+	 *	@param $endtime		查询结束时间，UNIX时间戳，每次查询不能跨日查询
+	 *	@param $pagesize	每页大小，每页最多拉取1000条
+	 *	@param $pageindex	查询第几页，从1开始	 
+	 */
+	public function getCustomServiceLog($token, $open_id, $starttime, $endtime, $pagesize=20, $pageindex=1){
+		return $this->base->getCustomServiceLog($token, $open_id, $starttime, $endtime, $pagesize, $pageindex);
+	}
+/* 多客服系统接口 end */
+
+
 //END PUSH ADV
 
 	//menu setting
@@ -178,6 +197,15 @@ class weixin{
 
 	public function menuDel($token){
 		return $this->base->menuDel($token);
+	}
+
+//
+
+//智能接口
+
+	//智能接口分析
+	public function getSemantic($token, $query, $category, $lat, $long, $city, $region, $appid, $uid){
+		return $this->base->getSemantic($token, $query, $category, $lat, $long, $city, $region, $appid, $uid);
 	}
 
 //uplaod and download
@@ -203,8 +231,8 @@ class weixin{
 	}
 
 //user info 
-	public function getUserInfo($token, $open_id){
-		return $this->base->getUserInfo($token, $open_id);
+	public function getUserInfo($token, $open_id, $lang='zh_CN'){
+		return $this->base->getUserInfo($token, $open_id, $lang);
 	}
 
 	public function getUserList($token, $next_openid){
@@ -231,6 +259,13 @@ class weixin{
 		return $this->base->movUserGroup($token, $json);
 	}
 
+	public function updateRemark($token, $open_id, $remark){
+		return $this->base->updateRemark($token, $open_id, $remark);
+	}
+
+//推送消息
+
+/* 推广相关 start */
 
 	//创建二维码ticket
 	public function temp_ticket($token, $json){
@@ -247,7 +282,13 @@ class weixin{
 		return $this->base->get_ticket($ticket);
 	}
 
-//推送消息
+	//把长连接转换为短链接
+	public function long2short($token, $url){
+		return $this->base->long2short($token, $url);
+	}
+
+
+/* 推广相关 end */
 	
 	//上传图文消息素材	
 	public function uploadMsgImageText($token, $msg){
@@ -255,13 +296,13 @@ class weixin{
 	}
 
 	//通过分组进行群发
-	public function sendAllByGroup($token, $group_id, $media_id){
-		return $this->base->sendAllByGroup($token, $group_id, $media_id);
+	public function sendAllByGroup($token, $group_id, $media_id, $msgtype){
+		return $this->base->sendAllByGroup($token, $group_id, $media_id, $msgtype);
 	}
 
 	//根据OpenID列表群发
-	public function sendAll($token, $user, $media_id){
-		return $this->base->sendAll($token, $user, $media_id);
+	public function sendAll($token, $user, $media_id, $msgtype){
+		return $this->base->sendAll($token, $user, $media_id, $msgtype);
 	}
 
 	//删除群发信息
@@ -269,10 +310,22 @@ class weixin{
 		return $this->base->deleteSend($token, $id);
 	}
 
+	//发送模版消息
+	public function sendTemplateInfo($token, $json){
+		return $this->base->sendTemplateInfo($token, $json);
+	}
+
+	//获取微信地址
+	public function getWeixinIp($token){
+		return $this->base->getWeixinIp($token);
+	}
+
+	//处理后的JSON
 	public function to_json($arr){
 		return $this->base->to_json($arr);
 	}
 
+	//提示
 	public function notice($msg, $line){
 		if(WEIXIN_DEBUG){
 			$this->logs($msg, $line);

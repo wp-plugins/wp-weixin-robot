@@ -74,7 +74,7 @@ class weixin_core{
 	 * @param MediaId
 	 * @ret string xml
 	 * exp:
-	 //echo $this->toMsgVoice($MediaId);
+	 * echo $this->toMsgVoice($MediaId);
 	 */
 	public function toMsgVoice($MediaId){
 		$this->replay_type = '声音回复';
@@ -89,7 +89,7 @@ class weixin_core{
 	 * @param $HQMusicUrl //高清播放(会首先选择)
 	 * @ret string xml
 	 * exp:
-	 //echo $this->toMsgVoice('声音','当男人好难！', $MusicUrl, $MusicUrl);//voice
+	 * echo $this->toMsgVoice('声音','当男人好难！', $MusicUrl, $MusicUrl);//voice
 	 */
 	public function toMsgMusic($title, $desc, $MusicUrl, $HQMusicUrl, $ThumbMediaId=''){
 		$this->replay_type = '音乐回复';
@@ -114,44 +114,44 @@ class weixin_core{
 	 * @ret string xml
 	 * exp
 	 * $textPic = array(
-			array(
-				'title'=> '标题',
-				'desc'=> '描述',
-				'pic'=> $this->bigPic(),//图片地址
-				'link'=>$pic,//图片链接地址
-			),//第一个图片为大图
-			array(
-				'title'=> '标题',
-				'desc'=> '描述',
-				'pic'=> $this->smallPic(),//图片地址
-				'link'=> '',//图片链接地址
-			),//此自以后皆为小图
-			array(
-				'title'=> '标题',
-				'desc' => '描述',
-				'pic'  => $this->smallPic(),//图片地址
-				'link' => '',//图片链接地址
-			),
-			array(
-				'title'=> '标题',
-				'desc' => '描述',
-				'pic'  => $this->smallPic(),//图片地址
-				'link' => '',//图片链接地址
-			),
-			array(
-				'title'=> '标题',
-				'desc' => '描述',
-				'pic'  => $this->smallPic(),//图片地址
-				'link' => '',//图片链接地址
-			),
-			array(
-				'title'=> '标题',
-				'desc' => '描述',
-				'pic'  => $this->smallPic(),//图片地址
-				'link' => '',//图片链接地址
-			),
-		);
-	//echo $this->toMsgTextPic($textPic);//图文
+	 *		array(
+	 *			'title'=> '标题',
+	*			'desc'=> '描述',
+	*			'pic'=> $this->bigPic(),//图片地址
+	*			'link'=>$pic,//图片链接地址
+	*		),//第一个图片为大图
+	*		array(
+	*			'title'=> '标题',
+	*			'desc'=> '描述',
+	*			'pic'=> $this->smallPic(),//图片地址
+	*			'link'=> '',//图片链接地址
+	*		),//此自以后皆为小图
+	*		array(
+	*			'title'=> '标题',
+	*			'desc' => '描述',
+	*			'pic'  => $this->smallPic(),//图片地址
+	*			'link' => '',//图片链接地址
+	*		),
+	*		array(
+	*			'title'=> '标题',
+	*			'desc' => '描述',
+	*			'pic'  => $this->smallPic(),//图片地址
+	*			'link' => '',//图片链接地址
+	*		),
+	*		array(
+	*			'title'=> '标题',
+	*			'desc' => '描述',
+	*			'pic'  => $this->smallPic(),//图片地址
+	*			'link' => '',//图片链接地址
+	*		),
+	*		array(
+	*			'title'=> '标题',
+	*			'desc' => '描述',
+	*			'pic'  => $this->smallPic(),//图片地址
+	*			'link' => '',//图片链接地址
+	*		),
+	*	);
+	*	echo $this->toMsgTextPic($textPic);//图文
 	*/
 	public function toMsgTextPic($picTextInfo){
 		$this->replay_type = '图文回复';
@@ -178,8 +178,7 @@ class weixin_core{
 		return $this->toMsgTextPic($info);//图文
 	}
 
-
-//
+	//重新获取token
 	public function getReToken(){
 		$data = $this->obj->getToken();
 		$data = json_decode($data, true);
@@ -189,6 +188,7 @@ class weixin_core{
 		return $data['access_token']; 
 	}
 	
+	//获取token
 	public function getToken(){
 		if(empty($this->options['ai']) || empty($this->options['as'])){
 			//$this->notice('请填写服务号完整信息!!!');
@@ -221,17 +221,40 @@ class weixin_core{
 		return $data['access_token'];
 	}
 
+/**
+ *  多客服系统接口 start 
+ *	多客服系统是在的插件中使用!!!
+ */
+	/**
+	 *	@func 获取客服聊天记录
+	 *	@param $open_id		普通用户的标识，对当前公众号唯一
+	 *	@param $starttime	查询开始时间，UNIX时间戳
+	 *	@param $endtime		查询结束时间，UNIX时间戳，每次查询不能跨日查询
+	 *	@param $pagesize	每页大小，每页最多拉取1000条
+	 *	@param $pageindex	查询第几页，从1开始
+	 *	@ret string json	 
+	 */
+	public function getCustomServiceLog($open_id, $starttime, $endtime, $pagesize=20, $pageindex=1){
+		$token = $this->getToken();
+		return $this->obj->getCustomServiceLog($token, $open_id, $starttime, $endtime, $pagesize, $pageindex);
+	}
+/* 多客服系统接口 end */
+
+/* 菜单相关 start */
+	//删除菜单
 	public function menuDel(){
 		$token = $this->getToken();
 		$data = $this->obj->menuDel($token);
 		return $data;
 	}
 
+	//设置菜单
 	public function menuSet($json){
 		$token = $this->getToken();
 		return $this->obj->menuSet($token, $json);
 	}
 
+	//获取菜单
 	public function menuGet(){
 		$token = $this->getToken();
 		$data = $this->obj->menuGet($token);
@@ -241,19 +264,54 @@ class weixin_core{
 		}
 		return $data;
 	}
+/* 菜单相关 start */
+
+	/**
+	 * @func 智能语意分析
+	 * @param string $query 	查询的句子
+	 * @param string $appid 	公众号唯一标示
+	 * @param string $uid 		用户唯一ID
+	 * @param string $city 		城市名称			默认 北京
+	 * @param string $category 	需要使用的服务类型	默认flight,hotel
+	 * @param string $region 	区域名称     		默认为空
+	 * @param string $lat 		纬度坐标  		默认为空
+	 * @param string $long 		经度坐标			默认为空
+	 * @ret string json
+	 */
+	public function getSemantic($query, $appid, $uid, $city='北京', $category='flight,hotel', $region ='', $lat = '', $long = ''){
+		$token = $this->getToken();
+		return $this->obj->getSemantic($token, $query, $category, $lat, $long, $city, $region, $appid, $uid);
+	}
 
 	//主动推送消息(24小时联系的人)
 
+	/**
+	 *	@func 推送文本类型的消息
+	 *	@param string $open_id
+	 *	@param string $msg
+	 */
 	public function pushMsgText($open_id, $msg){
 		$token = $this->getToken();
 		return $this->obj->pushMsgText($token, $open_id, $msg);
 	}
 
+	/**
+	 *	@func 推送图片消息
+	 *	@param string $open_id
+	 *	@param string $media_id
+	 *	@ret string json
+	 */
 	public function pushMsgImage($open_id, $media_id){
 		$token = $this->getToken();
 		return $this->obj->pushMsgImage($token, $open_id, $media_id);
 	}
 
+	/**
+	 *	@func 推送图片消息
+	 *	@param string $open_id
+	 *	@param string $file 文件绝对地址
+	 *	@ret string json
+	 */
 	public function pushMsgImageAdv($open_id, $file){
 		if(filesize($file) > 131072){
 			return '{errcode: "file size too big"}';
@@ -262,11 +320,23 @@ class weixin_core{
 		return $this->obj->pushMsgImageAdv($token, $open_id, $file);
 	}
 
+	/**
+	 *	@func 推送音频消息
+	 *	@param string $open_id
+	 *	@param string $media_id
+	 *	@ret string json
+	 */
 	public function pushMsgVoice($open_id,$media_id){
 		$token = $this->getToken();
 		return $this->obj->pushMsgVoice($token, $open_id, $media_id);
 	}
 
+	/**
+	 *	@func 推送音频消息
+	 *	@param string $open_id
+	 *	@param string $media_id
+	 *	@ret string json
+	 */
 	public function pushMsgVoiceAdv($open_id, $file){
 		if(filesize($file) > 262144){
 			return '{errcode: "file size too big"}';
@@ -302,7 +372,6 @@ class weixin_core{
 	}
 
 
-
 	/**
 	 * @exp: $info should be:
 	 *		$info[]["title"] = "Happy Day";
@@ -316,11 +385,21 @@ class weixin_core{
 	}
 //END PUSH
 	
+
+	/**
+	 * 	@func 下砸媒体文件
+	 *	@param string $media_id 媒体文件ID
+	 */
 	public function download($media_id){
 		$token = $this->getToken();
 		return $this->obj->download($token, $media_id);
 	}
 
+	/**
+ 	 *	@func 上传媒体文件
+ 	 *	@param string $type 媒体文件类型，分别有图片（image）、语音（voice）、视频（video）和缩略图（thumb）
+ 	 *	@param string $file 文件地址
+	 */
 	public function upload($type, $file){
 		$token = $this->getToken();
 		return $this->obj->upload($token, $type, $file);
@@ -338,45 +417,96 @@ class weixin_core{
 	}*/
 
 //user info about
-	public function getUserInfo($open_id){
+	/**
+	 * 	@func 获取用户信息
+	 *	@param string $open_id 普通用户的标识，对当前公众号唯一
+	 *	@param string $lang 返回国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语
+	 *	@param string json
+	 */
+	public function getUserInfo($open_id, $lang='zh_CN'){
 		$token = $this->getToken();
 		return $this->obj->getUserInfo($token, $open_id);
 	}
 
+	//获取用户列表
 	public function getUserList($next_openid = ''){
 		$token = $this->getToken();
 		return $this->obj->getUserList($token, $next_openid);
 	}
 
+	//创建分组
 	public function setUserGroup($json){
 		$token = $this->getToken();
 		return $this->obj->setUserGroup($token, $json);
 	}
 
+	//查询所有组
 	public function getUserGroup(){
 		$token = $this->getToken();
 		return $this->obj->getUserGroup($token);
 	}
 
+	//查询分组用户所在分组
 	public function getUserGroupPosition($json){
 		$token = $this->getToken();
 		return $this->obj->getUserGroupPosition($token, $json);
 	}
 
+	//修改分组名
 	public function modUserGroup($json){
 		$token = $this->getToken();
 		return $this->obj->modUserGroup($token, $json);
 	}
 
+	//移动用户分组
 	public function movUserGroup($json){
 		$token = $this->getToken();
 		return $this->obj->movUserGroup($token, $json);
 	}
 
+	//设置用户
+	public function updateRemark($open_id, $remark){
+		$token = $this->getToken();
+		return $this->obj->updateRemark($token, $open_id, $remark);
+	}
+//推送消息
+
+/* 推广相关 start */
+	
+	/**
+	 *	@func 获取二维码的图片的图片路径
+	 *	@scene_id 识别标示	默认midoks
+	 * 	@time 过期时间 当$type为temp类型时有效, 默认5分钟
+	 *	@type string 二维码的类型, 默认temp, 还有 permanent 类型
+	 *	@ret 错误返回空。
+	 */
+	public function get_ticket_url($scene_id = 'midoks', $time = '3000', $type = 'temp'){
+		$url = '';
+		if('temp' == $type){
+			$tmp_ticket = array(
+				'expire_seconds'=> $time,
+				'action_name'=>'QR_SCENE',
+				'action_info'=> array('scene'=> array('scene_id'=> $scene_id)),
+			);
+			$data = $this->temp_ticket($tmp_ticket);
+			$data = json_decode($data, true);
+			$url = $this->get_ticket($data['ticket']);
+		}else if('permanent' == $type){
+			$tmp_ticket = array(
+				'action_name'=>'QR_LIMIT_SCENE',
+				'action_info'=> array('scene'=> array('scene_id'=> $scene_id)),
+			);
+			$data = $this->permanent_ticket($tmp_ticket);
+			$data = json_decode($data, true);
+			$url = $this->get_ticket($data['ticket']);
+		}
+		return $url;
+	}
+
 	//创建二维码ticket
 	public function temp_ticket($json){
 		$token = $this->getToken();
-		return $this->obj->temp_ticket($token, $json);	
+		return $this->obj->temp_ticket($token, $json);
 	}
 
 	//创建永久二维码ticket
@@ -390,30 +520,154 @@ class weixin_core{
 		return $this->obj->get_ticket($ticket);
 	}
 
-//推送消息
-	
-	//上传图文消息素材	
-	public function uploadMsgImageText($msg){
+	//把长连接转换为短链接
+	public function long2short($url){
 		$token = $this->getToken();
-		return $this->obj->uploadMsgImageText($token, $msg);
+		return $this->obj->long2short($token, $url);
+	}
+
+/* 推广相关 end */
+
+
+	//不是真正意思上的群发,推荐到微信官方使用群发,本例,仅供参考
+	/**
+     * 	$msg[] = array(
+     *		'image' => WEIXIN_PLUGINS."/demo.jpg", 	//仅支持jpg(必须是本地的图片)
+     *		'author' => "xxx",					//作者
+     *		'title' => "Happy Day",				//标题
+     *		'content_source_url' => "www.qq.com",//内容地址
+     *		'content' => "content",				//内容
+     *		'digest' => "digest",				//图文消息的描述
+     *		'show_cover_pic' => "1"				//是否显示封面,0,为不显示,1,为显示
+     *	),
+	 */
+
+	public function sendGroupInfo(array $json){
+		//获取所有组
+		$groups = $this->getUserGroup();
+		$_groups = json_decode($groups, true);
+		if(!isset($_groups['groups'])){
+			return $_groups;
+		}
+		$_max = 0;
+		$_id = null;
+
+		foreach ($_groups['groups'] as $v) {
+			if($v['count'] > $_max){
+				$_max = $v['count'];
+				$_id = $v['id'];
+			}
+		}
+
+		if(is_numeric($_id)){
+			$_json = array();
+			foreach($json as $k=>$v){
+				$image = $this->upload('thumb', $v['image']);
+				$image = json_decode($image, 'true');
+				if (!isset($image['thumb_media_id'])) {
+					return $image;
+				}
+
+				$_insert = array();
+				$_insert['thumb_media_id'] 		= $image['thumb_media_id'];
+				$_insert['author'] 				= $v['author'];
+				$_insert['title'] 				= $v['title'];
+				$_insert['content_source_url'] 	= $v['content_source_url'];
+				$_insert['digest'] 				= $v['digest'];
+				$_insert['show_cover_pic'] 		= $v['show_cover_pic'];
+				$_json[] = $_insert;
+			}
+			$imageText = $this->uploadMsgImageText($_json);
+			$imageText = json_decode($imageText, 'true');
+			if(!isset($imageText['media_id'])){
+				return $imageText;
+			}
+			return $this->sendAllByGroup($_id, $imageText['media_id']);
+		}
+		return false;
+	}
+	
+	//上传图文消息素材优化版
+	/**
+     * 	$msg[] = array(
+     *		'thumb_media_id' => "qI6_Ze_6PtV7svjolgs",
+     *		'author' => "xxx",
+     *		'title' => "Happy Day",
+     *		'content_source_url' => "www.qq.com",
+     *		'content' => "content",
+     *		'digest' => "digest",
+     *		'show_cover_pic' => "1"
+     *	),
+	 */
+	public function uploadMsgImageText(array $msg){
+		$num = count($msg);
+		if($num>10){
+			$_msg = array_slice($msg, 0, 9);
+		}else{
+			$_msg = $msg;
+		}
+		$token = $this->getToken();
+		return $this->obj->uploadMsgImageText($token, $_msg);
 	}
 
 	//通过分组进行群发
-	public function sendAllByGroup($group_id, $media_id){
+	public function sendAllByGroup($group_id, $media_id, $msgtype = 'mpnews'){
 		$token = $this->getToken();
-		return $this->obj->sendAllByGroup($token, $group_id, $media_id);
+		return $this->obj->sendAllByGroup($token, $group_id, $media_id, $msgtype);
 	}
 
 	//根据OpenID列表群发
-	public function sendAll($user, $media_id){
+	public function sendAll($user, $media_id, $msgtype = 'mpnews'){
 		$token = $this->getToken();
-		return $this->obj->sendAll($token, $user, $media_id);
+		return $this->obj->sendAll($token, $user, $media_id, $msgtype);
 	}
 
 	//删除群发信息
 	public function deleteSend($id){
 		$token = $this->getToken();
 		return $this->obj->deleteSend($token, $id);
+	}
+
+	/**
+ 	 *	@func 模版接口发送消息
+ 	 *	@param array $json
+ 	 *  exp: $array = array(
+	 *		"touser"=>"OPENID",
+     *      "template_id"=>"ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY",
+     *      "url"=>"http://weixin.qq.com/download",
+     *      "topcolor"=>"#FF0000",
+     *		"data"=> array(
+     *			"first"=>array(
+     *			 	"value"=>"您好，您已成功消费。",
+     *              "color"=>"#0A0A0A"
+     *			 ),	
+     *			"keynote1"=>array(
+     *			 	"value"=>"巧克力",
+     *              "color"=>"#CCCCCC"
+     *			 ),
+     *			"keynote2"=>array(
+     *			 	"value"=>"39.8元",
+     *              "color"=>"#CCCCCC"
+     *			 ),
+     *			"keynote3"=>array(
+     *			 	"value"=>"2014年9月16日",
+     *              "color"=>"#CCCCCC"
+     *			 ),
+     * 			"remark"=>array(
+     *           	"value"=>"欢迎再次购买。",
+     *           	"color"=>"#173177"
+     *           )
+     *		)
+ 	 *	);
+	 */
+	public function sendTemplateInfo(array $json){
+		$token = $this->getToken();
+		return $this->obj->sendTemplateInfo($token, $json);
+	}
+
+	public function getWeixinIp(){
+		$token = $this->getToken();
+		return $this->obj->getWeixinIp($token);
 	}
 
 

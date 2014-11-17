@@ -249,7 +249,9 @@ class wp_weixin_robot_options extends weixin_core{
 
 	//@func 微信机器人插件介绍
 	public function weixin_robot_instro(){
-		echo file_get_contents(WEIXIN_ROOT.'html/weixin_robot_instro.html');
+		$content = file_get_contents(WEIXIN_ROOT.'html/weixin_robot_instro.html');
+		$content = str_replace('{$ROOT_URL}', WEIXIN_ROOT_URL, $content);
+		echo $content;
 	}
 
 	//初始化设置
@@ -386,7 +388,7 @@ EOT;
 		echo '<input style="margin-left:20px" name="weixin_db_clear" type="submit" class="button-primary" value="清空数据" />';
 		echo '</p></form></div></div>';?>
 		<p>请关注我的博客:<a href="http://midoks.cachecha.com/" target="_blank">midoks.cachecha.com</a></p>
-		<p><a href="http://me.alipay.com/midoks" target="_blank">捐助我</a></p>
+		<p><img src="<?php echo WEIXIN_ROOT_URL; ?>/image/mini_alipay.png" title="支付宝扫描,即可为我捐助。" alt="支付宝扫描,即可为我捐助。"></p>
 		<p>能为你服务,我感到无限的兴奋</p><?php
 	}
 
@@ -1020,11 +1022,11 @@ STR;
 		}	
 		echo '</select><td></tr></table>'
 			,'<p class="submit">'
-			,'<input name="submit_menu" type="submit" class="button-primary" value="提交菜单" />'
-			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="删除菜单" />'
-			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="同步到微信" />'
+			,'<input name="submit_menu" type="submit" class="button-primary" value="提交菜单" title="提交本地的数据库中..." alt="提交本地的数据库中..."/>'
+			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="删除菜单" title="删除本地数据菜单相关数据" alt="删除本地数据菜单相关数据" />'
+			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="同步到微信" title="同步到微信服务器上" alt="同步到微信服务器上"/>'
 			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="微信同步本地"'
-			,' title="成功后,原来数据删除,失败,不变!" />'
+			,' title="微信服务器上同步本地数据,成功后,原来数据删除,失败,不变!" />'
 			,'</p></form></div></div>';
 	}
 
