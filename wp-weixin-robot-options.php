@@ -276,6 +276,7 @@ class wp_weixin_robot_options extends weixin_core{
 			$this->options['weixin_robot_helper_is'] = $newp['weixin_robot_helper_is'];
 			$this->options['weixin_robot_chat_mode'] = $newp['weixin_robot_chat_mode'];
 			$this->options['weixin_robot_reply_id'] = $newp['weixin_robot_reply_id'];
+			$this->options['EncodingAESKey'] = trim($newp['EncodingAESKey']);
 			update_option('weixin_robot_options', $this->options);
 		}
 
@@ -348,8 +349,13 @@ EOT;
 		if( $options['weixin_robot_helper_is'] == 'true' ){ echo ' checked="checked"'; }
 		echo '/><br/>开启后,只有<span style="color:red;">?</span>回复帮助信息</td>';
 
+		//EncodingAESKey
+		echo '<tr valign="top"><th scope="row">EncodingAESKey(密钥)</th>';
+		echo '<td><input type="text" name="weixin_robot_options[EncodingAESKey]" value="'
+			.$options['EncodingAESKey'].'" size="35"></input><br />EncodingAESKey(消息加解密密钥)</td></tr>';
+
 		////////////////////////////////////////////////////////////////////////////////
-		//服务号设置(公司退关)
+		//服务号设置(公司相关)
 		//ai
 		echo '<tr valign="top"><td scope="row" colspan="2"><h2>服务号设置</h2><br/>说明:如果你不是服务号,请不要设置</td></tr>';
 		echo '<tr valign="top"><th scope="row">appID</th>';
@@ -359,6 +365,7 @@ EOT;
 		echo '<tr valign="top"><th scope="row">appsecret</th>';
 		echo '<td><input type="text" name="weixin_robot_options[as]" value="'
 			.$options['as'].'" size="35"></input><br />appsecret(第三方用户唯一凭证密钥)</td></tr>';
+
 
 		//是否开启聊天模式
 		echo '<tr  valign="top"><th scope="row">是否开启聊天模式</th>';
@@ -1023,7 +1030,7 @@ STR;
 		echo '</select><td></tr></table>'
 			,'<p class="submit">'
 			,'<input name="submit_menu" type="submit" class="button-primary" value="提交菜单" title="提交本地的数据库中..." alt="提交本地的数据库中..."/>'
-			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="删除菜单" title="删除本地数据菜单相关数据" alt="删除本地数据菜单相关数据" />'
+			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="删除菜单" title="删除服务器上数据菜单相关数据" alt="删除本地数据菜单相关数据" />'
 			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="同步到微信" title="同步到微信服务器上" alt="同步到微信服务器上"/>'
 			,'<input style="margin-left:10px" name="submit_menu" type="submit" class="button-primary" value="微信同步本地"'
 			,' title="微信服务器上同步本地数据,成功后,原来数据删除,失败,不变!" />'
