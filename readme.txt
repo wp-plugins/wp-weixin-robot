@@ -74,7 +74,7 @@ see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
 
 == Changelog ==
 
-= 5.2.24 =
+= 5.2.25 =
 * 增加long2short接口(长链接转化为短链接)[weixin-core.class.php]
 * 增加智能接口->语意理解接口。
 * 新增加get_ticket_url接口(简单获取二维码地址,详情看接口代码)。
@@ -88,6 +88,7 @@ see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
 * 新增获取微信ip地址:getWeixinIp。
 * 对事件推送群发结果,模版事件推送结果,进行了处理。
 * 优化接口注释
+* 实现EncodingAESKey安全加解密模式
 
 = 5.2.6 =
 * 扩展锁机制(要我老命的开发啊!)
