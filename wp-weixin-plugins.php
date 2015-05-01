@@ -12,7 +12,10 @@ class wp_weixin_plugins{
 
 	//构造函数
 	public function __construct($obj){
-		define('WEIXIN_PLUGINS', WEIXIN_ROOT.'extends/');
+		
+		if(!defined('WEIXIN_PLUGINS')){
+			define('WEIXIN_PLUGINS', WEIXIN_ROOT.'extends/');
+		}
 		$this->obj = $obj;
 
 		$this->info = isset($this->obj->info) ? $this->obj->info : null;

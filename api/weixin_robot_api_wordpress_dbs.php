@@ -44,8 +44,16 @@ class weixin_robot_api_wordpress_dbs{
 			`response` varchar(255) NOT NULL comment '响应信息',
 		   	`response_time` double(10,6) not null comment '响应时间',
 			primary key(`id`)
-			)engine=MyISAM default character set utf8 comment='微信机器人插件' collate utf8_general_ci";
+		)engine=MyISAM default character set utf8 comment='微信机器人插件' collate utf8_general_ci";
+
+		$sql = $this->replace_comment($sql);
 		$this->linkID->query($sql);
+	}
+
+	//替换注释,解决在wp4.2版本中,创建表不成功的问题
+	public function replace_comment($sql){
+		$re = preg_replace('/\'(.*)\'/im', "'already replace'", $sql);
+		return $re;
 	}
 
 	//插件入数据
@@ -79,7 +87,8 @@ class weixin_robot_api_wordpress_dbs{
 			`type` varchar(100) not null default 'text' comment '回复类型',
 			primary key(`id`),
 			UNIQUE KEY `keyword` (`keyword`)
-			)engine=MyISAM default character set utf8 comment='微信机器人关键字自定义回复' collate utf8_general_ci";
+		)engine=MyISAM default character set utf8 comment='微信机器人关键字自定义回复' collate utf8_general_ci";
+		$sql = $this->replace_comment($sql);
 		return $this->linkID->query($sql);
 	}
 
@@ -130,7 +139,8 @@ class weixin_robot_api_wordpress_dbs{
 			`menu_callback` varchar(255) not null comment '回复信息',
 			`pid` int(10) not null comment '父级ID',
 			primary key(`id`)
-			)engine=MyISAM default character set utf8 comment='微信机器人自定义菜单设置' collate utf8_general_ci";
+		)engine=MyISAM default character set utf8 comment='微信机器人自定义菜单设置' collate utf8_general_ci";
+		$sql = $this->replace_comment($sql);
 		return $this->linkID->query($sql);
 	}
 
@@ -189,7 +199,8 @@ class weixin_robot_api_wordpress_dbs{
 			`ext_int` int not null comment '是否启动',
 			primary key(`id`),
 			UNIQUE KEY `ext_name` (`ext_name`)
-			)engine=MyISAM default character set utf8 comment='微信机器人扩展管理' collate utf8_general_ci";
+		)engine=MyISAM default character set utf8 comment='微信机器人扩展管理' collate utf8_general_ci";
+		$sql = $this->replace_comment($sql);
 		return $this->linkID->query($sql);
 	}
 
