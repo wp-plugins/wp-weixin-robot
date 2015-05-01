@@ -10,11 +10,21 @@ class weixin_robot_api_wordpress_dbs{
 	
 	//数据库实例
 	public $linkID;
+	public $collate;
 
 	//架构函数
 	public function __construct(){
 		global $wpdb;
 		$this->linkID = $wpdb;
+		$this->linkID->hide_errors();
+
+		require_once(ABSPATH.'wp-admim/includes/upgrade.php');
+		if($wpdb->has_cap('collation')){
+			$this->collate .= " DEFAULT CHARACTER SET {$wpdb->charset} ";
+		}else{
+			$this->collate .= " COLLATE {$wpdb->collate} ";
+		}
+
 	}
 
 	//创建数据表
@@ -47,6 +57,7 @@ class weixin_robot_api_wordpress_dbs{
 		)engine=MyISAM default character set utf8 comment='微信机器人插件' collate utf8_general_ci";
 
 		$sql = $this->replace_comment($sql);
+		//dbDelta($sql);
 		$this->linkID->query($sql);
 	}
 
@@ -83,15 +94,14 @@ class weixin_robot_api_wordpress_dbs{
 			`keyword` varchar(255) not null comment '关键字',
 			`relpy` text not null comment '回复信息',
 			`status` char(64) not null comment '消息ID',
-			`time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' comment '有效期',
-			`type` varchar(100) not null default 'text' comment '回复类型',
+			`time` datetime NOT NULL comment '有效期',
+			`type` varchar(100) not null comment '回复类型',
 			primary key(`id`),
 			UNIQUE KEY `keyword` (`keyword`)
 		)engine=MyISAM default character set utf8 comment='微信机器人关键字自定义回复' collate utf8_general_ci";
 		$sql = $this->replace_comment($sql);
 		return $this->linkID->query($sql);
 	}
-
 
 
 	//插入数据
@@ -134,7 +144,7 @@ class weixin_robot_api_wordpress_dbs{
 		$sql = "create table if not exists `{$this->table_name_menu}`(
 			`id` int(10) not null auto_increment comment '自增ID',
 			`menu_name` varchar(255) not null comment '菜单名',
-			`menu_type` varchar(100) not null default 'click' comment '回复类型',
+			`menu_type` varchar(100) not null default comment '回复类型',
 			`menu_key` text not null comment '键值',
 			`menu_callback` varchar(255) not null comment '回复信息',
 			`pid` int(10) not null comment '父级ID',
