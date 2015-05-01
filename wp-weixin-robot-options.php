@@ -351,8 +351,9 @@ EOT;
 
 		//EncodingAESKey
 		echo '<tr valign="top"><th scope="row">EncodingAESKey(密钥)</th>';
-		echo '<td><input type="text" name="weixin_robot_options[EncodingAESKey]" value="'
-			.$options['EncodingAESKey'].'" size="35"></input><br />EncodingAESKey(消息加解密密钥)</td></tr>';
+		echo '<td><input type="text" name="weixin_robot_options[EncodingAESKey]" value="';
+		if(!empty($options['EncodingAESKey'])){ echo($options['EncodingAESKey']); }
+		echo '" size="35"></input><br />EncodingAESKey(消息加解密密钥)</td></tr>';
 
 		////////////////////////////////////////////////////////////////////////////////
 		//服务号设置(公司相关)
