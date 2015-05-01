@@ -144,7 +144,7 @@ class weixin_robot_api_wordpress_dbs{
 		$sql = "create table if not exists `{$this->table_name_menu}`(
 			`id` int(10) not null auto_increment comment '自增ID',
 			`menu_name` varchar(255) not null comment '菜单名',
-			`menu_type` varchar(100) not null default comment '回复类型',
+			`menu_type` varchar(100) not null comment '回复类型',
 			`menu_key` text not null comment '键值',
 			`menu_callback` varchar(255) not null comment '回复信息',
 			`pid` int(10) not null comment '父级ID',
