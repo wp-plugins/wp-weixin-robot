@@ -18,7 +18,7 @@ class weixin_robot_api_wordpress_dbs{
 		$this->linkID = $wpdb;
 		$this->linkID->hide_errors();
 
-		require_once(ABSPATH.'wp-admim/includes/upgrade.php');
+		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		if($wpdb->has_cap('collation')){
 			$this->collate .= " DEFAULT CHARACTER SET {$wpdb->charset} ";
 		}else{
