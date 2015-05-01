@@ -3,7 +3,7 @@ Contributors: midoks@163.com
 Donate link: https://me.alipay.com/midoks
 Tags: weixin robot
 Requires at least: 3.3
-Tested up to: 4.0
+Tested up to: 4.2
 Stable tag: 5.2.25
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -73,6 +73,11 @@ see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
 7. 扩展管理
 
 == Changelog ==
+
+
+= 5.2.27 =
+* 解决与WordPress 4.2的不兼容(导致的数据创建失败)
+* 修复一些隐藏的错误(不重要)。
 
 = 5.2.25 =
 * 增加long2short接口(长链接转化为短链接)[weixin-core.class.php]
