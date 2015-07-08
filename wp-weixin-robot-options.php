@@ -141,8 +141,12 @@ class wp_weixin_robot_options extends weixin_core{
 		//服务号配置
 		$weixin_robot_options['ai'] = '';
 		$weixin_robot_options['as'] = '';
+
+		//TOKEN相关(URL验证)
+		$weixin_robot_options['token'] = 'midoks';
+		$weixin_robot_options['token_url'] = 'midoks';
 		
-		//token
+		//token()
 		$weixin_robot_options['weixin_robot_token'] = '';
 
 		//是否开启对话聊天模式
@@ -262,21 +266,22 @@ class wp_weixin_robot_options extends weixin_core{
 		}
 
 		//更新数据
-		if( isset($_POST['submit']) && $_POST['weixin_robot_setting']){
+		if( isset($_POST['submit']) && isset($_POST['weixin_robot_setting'])){
 			$newp = $_POST['weixin_robot_options'];
-			$this->options['ai'] = $newp['ai'];
-			$this->options['as'] = $newp['as'];
-			$this->options['subscribe'] = $newp['subscribe'];
-			$this->options['opt_pic_show'] = empty($newp['opt_pic_show']) ? '' : $newp['opt_pic_show'];
-			$this->options['opt_big_show'] = empty($newp['opt_big_show']) ? '' : $newp['opt_big_show'];
-			$this->options['opt_small_show'] = $newp['opt_small_show'];
-			$this->options['weixin_robot_debug'] = $newp['weixin_robot_debug'];
-			$this->options['weixin_robot_record'] = $newp['weixin_robot_record'];
-			$this->options['weixin_robot_helper'] = trim($newp['weixin_robot_helper']);
-			$this->options['weixin_robot_helper_is'] = $newp['weixin_robot_helper_is'];
-			$this->options['weixin_robot_chat_mode'] = $newp['weixin_robot_chat_mode'];
-			$this->options['weixin_robot_reply_id'] = $newp['weixin_robot_reply_id'];
-			$this->options['EncodingAESKey'] = trim($newp['EncodingAESKey']);
+			$this->options['ai'] 						= $newp['ai'];
+			$this->options['as'] 						= $newp['as'];
+			$this->options['subscribe'] 				= $newp['subscribe'];
+			$this->options['token_url'] 				= empty($newp['token_url']) ? 'midoks' : $newp['token_url'];
+			$this->options['token'] 					= empty($newp['token']) ? 'midoks' : $newp['token'];
+			$this->options['opt_pic_show'] 				= empty($newp['opt_pic_show']) ? '' : $newp['opt_pic_show'];
+			$this->options['opt_big_show'] 				= empty($newp['opt_big_show']) ? '' : $newp['opt_big_show'];
+			$this->options['opt_small_show'] 			= $newp['opt_small_show'];
+			$this->options['weixin_robot_debug'] 		= $newp['weixin_robot_debug'];
+			$this->options['weixin_robot_record'] 		= $newp['weixin_robot_record'];
+			$this->options['weixin_robot_helper'] 		= trim($newp['weixin_robot_helper']);
+			$this->options['weixin_robot_helper_is'] 	= $newp['weixin_robot_helper_is'];
+			$this->options['weixin_robot_chat_mode'] 	= $newp['weixin_robot_chat_mode'];
+			$this->options['weixin_robot_reply_id'] 	= $newp['weixin_robot_reply_id'];
 			update_option('weixin_robot_options', $this->options);
 		}
 
@@ -297,12 +302,38 @@ EOT;
 	//基础设置
 	public function weixin_robot_setting_init_base(){
 		$options = $this->options;
+		$current_url = home_url(add_query_arg(array(),$wp->request));
+
+
 
 		//关注
 		echo '<tr valign="top" colspan="2"><td scope="row"><h2>基本设置</h2></td></tr>';
 		echo '<tr  valign="top"><th scope="row">订阅事件提示(subscribe)</th>';
 		echo '<td><textarea name="weixin_robot_options[subscribe]" style="width:350px;height:100px;" class="regular-text code">'
 			.$options['subscribe'].'</textarea><br />当用户关注时,发送的消息</td></tr>';
+
+		//Token URL
+		echo '<tr  valign="top"><th scope="row">URL(服务器地址)</th>';
+		echo '<td><input id="weixin_token_url" url="'.$current_url.'" type="text" name="weixin_robot_options[token_url]" value="';
+		if(!empty($options['token_url'])){ echo($options['token_url']); }
+		echo '" size="35"></input><br /><span><b id="weixin_token_url_exp">'.$current_url.'/?'.$options['token_url'].'</b><br/>URL(服务器地址)</span></td></tr>';
+		echo('<script>jQuery(function($){  $("#weixin_token_url").keyup(function(){
+			var u = $(this).attr("url");
+			var t = $(this).val();
+			$("#weixin_token_url_exp").text(u+"/?"+t);
+		});  });</script>');
+
+		//Token
+		echo '<tr  valign="top"><th scope="row">Token(令牌)</th>';
+		echo '<td><input type="text" name="weixin_robot_options[token]" value="';
+		if(!empty($options['token'])){ echo($options['token']); }
+		echo '" size="35"></input><br />Token(令牌)</td></tr>';
+
+		//EncodingAESKey
+		echo '<tr valign="top"><th scope="row">EncodingAESKey(密钥)</th>';
+		echo '<td><input type="text" name="weixin_robot_options[EncodingAESKey]" value="';
+		if(!empty($options['EncodingAESKey'])){ echo($options['EncodingAESKey']); }
+		echo '" size="35"></input><br />EncodingAESKey(消息加解密密钥)</td></tr>';
 
 		//图片最优显示
 		echo '<tr  valign="top"><th scope="row">图片最优显示</th>';
@@ -349,11 +380,6 @@ EOT;
 		if( $options['weixin_robot_helper_is'] == 'true' ){ echo ' checked="checked"'; }
 		echo '/><br/>开启后,只有<span style="color:red;">?</span>回复帮助信息</td>';
 
-		//EncodingAESKey
-		echo '<tr valign="top"><th scope="row">EncodingAESKey(密钥)</th>';
-		echo '<td><input type="text" name="weixin_robot_options[EncodingAESKey]" value="';
-		if(!empty($options['EncodingAESKey'])){ echo($options['EncodingAESKey']); }
-		echo '" size="35"></input><br />EncodingAESKey(消息加解密密钥)</td></tr>';
 
 		////////////////////////////////////////////////////////////////////////////////
 		//服务号设置(公司相关)
