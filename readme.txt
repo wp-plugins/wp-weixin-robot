@@ -1,10 +1,10 @@
-﻿=== WP微信机器人 ===
+=== WP微信机器人 ===
 Contributors: midoks@163.com
 Donate link: https://me.alipay.com/midoks
 Tags: weixin robot
 Requires at least: 3.3
 Tested up to: 4.2
-Stable tag: 5.2.28
+Stable tag: 5.2.29
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,8 +76,6 @@ see: http://midoks.cachecha.com/p/wordpress_plugin_weixin_root.html
 = 5.2.29 =
 * 把验证地址放在配置里
 * 把token放在配置里
-
-
 
 
 = 5.2.27 =
