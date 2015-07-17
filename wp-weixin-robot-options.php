@@ -301,6 +301,7 @@ EOT;
 
 	//基础设置
 	public function weixin_robot_setting_init_base(){
+		global $wp;
 		$options = $this->options;
 		$current_url = home_url(add_query_arg(array(),$wp->request));
 
